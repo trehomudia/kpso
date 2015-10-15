@@ -2,7 +2,6 @@
 #include "team.h"
 #include "ui_footbol_manager.h"
 #include "table_view.h"
-#include <QSplitter>
 #include <QStandardItemModel>
 
 QList<int> cashList = QList<int>() << 20 << 20 << 40 << 80 << 160 << 320 << 640 << 1280 << 2560 << 5120;
