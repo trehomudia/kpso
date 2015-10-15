@@ -1,6 +1,6 @@
-#include "statistica.h"
+#include "footbol_manager.h"
 #include "team.h"
-#include "ui_statistica.h"
+#include "ui_footbol_manager.h"
 #include "table_view.h"
 #include <QSplitter>
 #include <QStandardItemModel>
@@ -8,7 +8,7 @@
 QList<int> cashList = QList<int>() << 20 << 20 << 40 << 80 << 160 << 320 << 640 << 1280 << 2560 << 5120;
 QList<int> cashList2 = QList<int>() << 30 << 200 << 1200 << 7200;
 
-class statistica::PrivateData
+class CFootbolManager::PrivateData
 {
 public:
   PrivateData(){}
@@ -18,19 +18,19 @@ public:
   Ui::statistica ui;
 };
 
-statistica::statistica(QWidget *parent)
+CFootbolManager::CFootbolManager(QWidget *parent)
   : QDialog(parent)
 {
   m_pData = new PrivateData();
   m_pData->ui.setupUi(this);
 }
 
-statistica::~statistica()
+CFootbolManager::~CFootbolManager()
 {
   delete m_pData;
 }
 
-void statistica::CommonResult()
+void CFootbolManager::CommonResult()
 {
   CStandardItemModel* table = AddTable(tr("Общий результат"));
   table->SetColumns(GetTeamNames());
@@ -42,7 +42,7 @@ void statistica::CommonResult()
   }
 }
 
-void statistica::Do()
+void CFootbolManager::Do()
 {
   ReadFiles();
   FormDataTeams();
@@ -52,7 +52,7 @@ void statistica::Do()
 
 }
 
-QStringList statistica::GetTeamNames()
+QStringList CFootbolManager::GetTeamNames()
 {
   QSet<QString> teams;
   foreach(CTeam team, m_pData->teams)
@@ -61,7 +61,7 @@ QStringList statistica::GetTeamNames()
   return teams.toList();
 }
 
-void statistica::FormTeams(Season season)
+void CFootbolManager::FormTeams(Season season)
 {
   foreach(CMatch match, season)
   {
@@ -87,25 +87,25 @@ void statistica::FormTeams(Season season)
   }
 }
 
-void statistica::ReadFiles()
+void CFootbolManager::ReadFiles()
 {
   foreach(QString fileName, GetFileNames())
     FormTeams(ReadFile(fileName));
 }
 
-void statistica::FormDataTeams()
+void CFootbolManager::FormDataTeams()
 {
   for(int i = 0; i < m_pData->teams.count(); ++i)
     m_pData->teams[i].FormData();
 }
 
-void statistica::ShowSource()
+void CFootbolManager::ShowSource()
 {
   CommonResult();
   SetVisibleColumns(GetLastNames());
 }
 
-void statistica::SetVisibleColumns(QStringList names)
+void CFootbolManager::SetVisibleColumns(QStringList names)
 {
   CTableViewWd* view;
   for(int i = 0; i < m_pData->ui.tabWidget->count(); ++i)
@@ -115,7 +115,6 @@ void statistica::SetVisibleColumns(QStringList names)
   CStandardItemModel* model = qobject_cast<CStandardItemModel*>(view->model());
   for(int i = 0; i < model->columnCount(); ++i)
   {
-    QString str = model->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString();
     if(!GetLastNames().contains(model->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString()))
     {
       view->horizontalHeader()->setSectionHidden(i, true);
@@ -147,7 +146,7 @@ QString GetCurrentSeasonFileName()
   return QString("../kpso/seasons/data15.csv");
 }
 
-CStandardItemModel* statistica::AddTable(const QString& tableName)
+CStandardItemModel* CFootbolManager::AddTable(const QString& tableName)
 {
   CTableViewWd* view = new CTableViewWd(this);
   view->setAllColumnsDelegate();

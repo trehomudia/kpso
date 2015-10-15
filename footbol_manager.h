@@ -8,13 +8,13 @@ class QSplitter;
 class QStandardItemModel;
 class QTeam;
 
-class statistica : public QDialog
+class CFootbolManager : public QDialog
 {
   Q_OBJECT
 
 public:
-  explicit statistica(QWidget *parent = 0);
-  ~statistica();
+  explicit CFootbolManager(QWidget *parent = 0);
+  ~CFootbolManager();
   void Do();
 
 

@@ -13,13 +13,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        statistica.cpp\
+        footbol_manager.cpp\
         table_view.cpp\
         team.cpp
 
 
-HEADERS  += statistica.h\
+HEADERS  += footbol_manager.h\
             table_view.h\
             team.h
 
-FORMS    += statistica.ui
+FORMS    += footbol_manager.ui
