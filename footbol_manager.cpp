@@ -47,9 +47,6 @@ void CFootbolManager::Do()
   ReadFiles();
   FormDataTeams();
   ShowSource();
-//  CommonCalculation();
-//  PrintCommonCalculation();
-
 }
 
 QStringList CFootbolManager::GetTeamNames()
