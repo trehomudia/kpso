@@ -126,25 +126,25 @@ void statistica::SetVisibleColumns(QStringList names)
 QStringList GetFileNames()
 {
   QStringList list;
-  list << "../statistica/seasons/data2.csv";
-  list << "../statistica/seasons/data3.csv";
-  list << "../statistica/seasons/data4.csv";
-  list << "../statistica/seasons/data5.csv";
-  list << "../statistica/seasons/data6.csv";
-  list << "../statistica/seasons/data7.csv";
-  list << "../statistica/seasons/data8.csv";
-  list << "../statistica/seasons/data9.csv";
-  list << "../statistica/seasons/data10.csv";
-  list << "../statistica/seasons/data11.csv";
-  list << "../statistica/seasons/data12.csv";
-  list << "../statistica/seasons/data13.csv";
-  list << "../statistica/seasons/data14.csv";
+  list << "../kpso/seasons/data2.csv";
+  list << "../kpso/seasons/data3.csv";
+  list << "../kpso/seasons/data4.csv";
+  list << "../kpso/seasons/data5.csv";
+  list << "../kpso/seasons/data6.csv";
+  list << "../kpso/seasons/data7.csv";
+  list << "../kpso/seasons/data8.csv";
+  list << "../kpso/seasons/data9.csv";
+  list << "../kpso/seasons/data10.csv";
+  list << "../kpso/seasons/data11.csv";
+  list << "../kpso/seasons/data12.csv";
+  list << "../kpso/seasons/data13.csv";
+  list << "../kpso/seasons/data14.csv";
   return list;
 }
 
 QString GetCurrentSeasonFileName()
 {
-  return QString("../statistica/seasons/data15.csv");
+  return QString("../kpso/seasons/data15.csv");
 }
 
 CStandardItemModel* statistica::AddTable(const QString& tableName)
