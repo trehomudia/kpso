@@ -121,25 +121,25 @@ void CFootbolManager::SetVisibleColumns(QStringList names)
 QStringList GetFileNames()
 {
   QStringList list;
-  list << "../kpso/seasons/data2.csv";
-  list << "../kpso/seasons/data3.csv";
-  list << "../kpso/seasons/data4.csv";
-  list << "../kpso/seasons/data5.csv";
-  list << "../kpso/seasons/data6.csv";
-  list << "../kpso/seasons/data7.csv";
-  list << "../kpso/seasons/data8.csv";
-  list << "../kpso/seasons/data9.csv";
-  list << "../kpso/seasons/data10.csv";
-  list << "../kpso/seasons/data11.csv";
-  list << "../kpso/seasons/data12.csv";
-  list << "../kpso/seasons/data13.csv";
-  list << "../kpso/seasons/data14.csv";
+  list << "../kpso/data/russia/02.csv";
+  list << "../kpso/data/russia/03.csv";
+  list << "../kpso/data/russia/04.csv";
+  list << "../kpso/data/russia/05.csv";
+  list << "../kpso/data/russia/06.csv";
+  list << "../kpso/data/russia/07.csv";
+  list << "../kpso/data/russia/08.csv";
+  list << "../kpso/data/russia/09.csv";
+  list << "../kpso/data/russia/10.csv";
+  list << "../kpso/data/russia/11.csv";
+  list << "../kpso/data/russia/12.csv";
+  list << "../kpso/data/russia/13.csv";
+  list << "../kpso/data/russia/14.csv";
   return list;
 }
 
 QString GetCurrentSeasonFileName()
 {
-  return QString("../kpso/seasons/data15.csv");
+  return QString("../kpso/data/russia/15.csv");
 }
 
 CStandardItemModel* CFootbolManager::AddTable(const QString& tableName)
