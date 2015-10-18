@@ -8,6 +8,8 @@ class QSplitter;
 class QStandardItemModel;
 class QTeam;
 
+typedef QVector<CTeam> Championat;
+
 class CFootbolManager : public QDialog
 {
   Q_OBJECT
@@ -21,18 +23,17 @@ private:
   class PrivateData;
   PrivateData* m_pData;
 
-  void FormTeams(Season season);
+  void FormTeams(Season season, const QString& champName);
   void FormDataTeams();
   void ReadFiles();
   void ShowSource();
   void CommonResult();
-  void SetVisibleColumns(QStringList names);
+  void SetVisibleColumns(const QString& champName);
   CStandardItemModel* AddTable(const QString& tableName);
-  QStringList GetTeamNames();
+  QStringList GetTeamNames(const QString& champName);
 };
 
-QStringList GetFileNames();
-QString GetCurrentSeasonFileName();
-QStringList GetLastNames();
+QStringList GetFileNames(const QString& champName);
+QStringList GetChampNames();
 
 #endif // STATISTICA_H

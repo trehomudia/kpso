@@ -13,7 +13,7 @@ public:
   PrivateData(){}
   ~PrivateData(){}
 
-  QVector<CTeam> teams;
+  QMap<QString, Championat> championats;
   Ui::statistica ui;
 };
 
@@ -31,13 +31,16 @@ CFootbolManager::~CFootbolManager()
 
 void CFootbolManager::CommonResult()
 {
-  CStandardItemModel* table = AddTable(tr("Общий результат"));
-  table->SetColumns(GetTeamNames());
-  table->setVerticalHeaderLabels(QStringList() << tr("Без ничьих") << tr("Ничьи подряд"));
-  foreach(CTeam team, m_pData->teams)
+  foreach(QString champName, m_pData->championats.keys())
   {
-    table->PrintCommonResult(team, NO_PARITY);
-    table->PrintCommonResult(team, PARITY);
+    CStandardItemModel* table = AddTable(tr("Общий результат: ") + champName);
+    table->SetColumns(GetTeamNames(champName));
+    table->setVerticalHeaderLabels(QStringList() << tr("Без ничьих") << tr("Ничьи подряд"));
+    foreach(CTeam team, m_pData->championats.value(champName))
+    {
+      table->PrintCommonResult(team, NO_PARITY);
+      table->PrintCommonResult(team, PARITY);
+    }
   }
 }
 
@@ -48,36 +51,36 @@ void CFootbolManager::Do()
   ShowSource();
 }
 
-QStringList CFootbolManager::GetTeamNames()
+QStringList CFootbolManager::GetTeamNames(const QString& champName)
 {
   QSet<QString> teams;
-  foreach(CTeam team, m_pData->teams)
+  foreach(CTeam team, m_pData->championats[champName])
     teams << team.GetName();
 
   return teams.toList();
 }
 
-void CFootbolManager::FormTeams(Season season)
+void CFootbolManager::FormTeams(Season season, const QString& champName)
 {
   foreach(CMatch match, season)
   {
-    if (!GetTeamNames().contains(match.name))
+    if (!GetTeamNames(champName).contains(match.name))
     {
       CTeam team(match.name);
-      m_pData->teams << team;
+      m_pData->championats[champName] << team;
     }
   }
 
   foreach(CMatch match, season)
   {
-    for(int i = 0; i < m_pData->teams.count(); ++i)
+    for(int i = 0; i < m_pData->championats[champName].count(); ++i)
     {
-      if (m_pData->teams[i].GetName() == match.name)
+      if (m_pData->championats[champName][i].GetName() == match.name)
       {
-        if (!m_pData->teams[i].seasons.contains(match.season))
-          m_pData->teams[i].seasons.insert(match.season, Season());
+        if (!m_pData->championats[champName][i].seasons.contains(match.season))
+          m_pData->championats[champName][i].seasons.insert(match.season, Season());
 
-        m_pData->teams[i].seasons[match.season] << match;
+        m_pData->championats[champName][i].seasons[match.season] << match;
       }
     }
   }
@@ -85,31 +88,41 @@ void CFootbolManager::FormTeams(Season season)
 
 void CFootbolManager::ReadFiles()
 {
-  foreach(QString fileName, GetFileNames())
-    FormTeams(ReadFile(fileName));
+  foreach(QString champ, GetChampNames())
+    m_pData->championats.insert(champ, Championat());
+
+  foreach(QString champName, m_pData->championats.keys())
+    foreach(QString fileName, GetFileNames(champName))
+      FormTeams(ReadFile(fileName), champName);
 }
 
 void CFootbolManager::FormDataTeams()
 {
-  for(int i = 0; i < m_pData->teams.count(); ++i)
-    m_pData->teams[i].FormData();
+  foreach(QString champName, m_pData->championats.keys())
+    for(int i = 0; i < m_pData->championats[champName].count(); ++i)
+      m_pData->championats[champName][i].FormData();
 }
 
 void CFootbolManager::ShowSource()
 {
   CommonResult();
-  SetVisibleColumns(GetLastNames());
+  foreach(QString champName, m_pData->championats.keys())
+    SetVisibleColumns(champName);
 }
 
-void CFootbolManager::SetVisibleColumns(QStringList names)
+void CFootbolManager::SetVisibleColumns(const QString& champName)
 {
-  if (names.isEmpty())
-    return;
-
   CTableViewWd* view;
   for(int i = 0; i < m_pData->ui.tabWidget->count(); ++i)
-    if (m_pData->ui.tabWidget->tabText(i) == tr("Общий результат"))
+    if (m_pData->ui.tabWidget->tabText(i) == (tr("Общий результат: ") + champName))
       view = qobject_cast<CTableViewWd*>(m_pData->ui.tabWidget->widget(i));
+
+  QSet<QString> set;
+  Season season = ReadFile(GetFileNames(champName).last());
+  foreach(CMatch match, season)
+    set << match.name;
+
+  QStringList names = set.toList();
 
   CStandardItemModel* model = qobject_cast<CStandardItemModel*>(view->model());
   for(int i = 0; i < model->columnCount(); ++i)
@@ -121,40 +134,48 @@ void CFootbolManager::SetVisibleColumns(QStringList names)
   }
 }
 
-QStringList GetFileNames()
+QStringList GetFileNames(const QString& champName)
 {
   QStringList list;
-//  list << "../kpso/data/russia/02.csv";
-//  list << "../kpso/data/russia/03.csv";
-//  list << "../kpso/data/russia/04.csv";
-//  list << "../kpso/data/russia/05.csv";
-//  list << "../kpso/data/russia/06.csv";
-//  list << "../kpso/data/russia/07.csv";
-//  list << "../kpso/data/russia/08.csv";
-//  list << "../kpso/data/russia/09.csv";
-//  list << "../kpso/data/russia/10.csv";
-//  list << "../kpso/data/russia/11.csv";
-//  list << "../kpso/data/russia/12.csv";
-//  list << "../kpso/data/russia/13.csv";
-//  list << "../kpso/data/russia/14.csv";
-//  list << "../kpso/data/russia/15.csv";
-  list << "../kpso/data/england/06.csv";
-  list << "../kpso/data/england/07.csv";
-  list << "../kpso/data/england/08.csv";
-  list << "../kpso/data/england/09.csv";
-  list << "../kpso/data/england/10.csv";
-  list << "../kpso/data/england/11.csv";
-  list << "../kpso/data/england/12.csv";
-  list << "../kpso/data/england/13.csv";
-  list << "../kpso/data/england/14.csv";
-  list << "../kpso/data/england/15.csv";
+  if (champName == "russia")
+  {
+    list << "../kpso/data/russia/02.csv";
+    list << "../kpso/data/russia/03.csv";
+    list << "../kpso/data/russia/04.csv";
+    list << "../kpso/data/russia/05.csv";
+    list << "../kpso/data/russia/06.csv";
+    list << "../kpso/data/russia/07.csv";
+    list << "../kpso/data/russia/08.csv";
+    list << "../kpso/data/russia/09.csv";
+    list << "../kpso/data/russia/10.csv";
+    list << "../kpso/data/russia/11.csv";
+    list << "../kpso/data/russia/12.csv";
+    list << "../kpso/data/russia/13.csv";
+    list << "../kpso/data/russia/14.csv";
+    list << "../kpso/data/russia/15.csv";
+  }
+  else if(champName == "england")
+  {
+    list << "../kpso/data/england/06.csv";
+    list << "../kpso/data/england/07.csv";
+    list << "../kpso/data/england/08.csv";
+    list << "../kpso/data/england/09.csv";
+    list << "../kpso/data/england/10.csv";
+    list << "../kpso/data/england/11.csv";
+    list << "../kpso/data/england/12.csv";
+    list << "../kpso/data/england/13.csv";
+    list << "../kpso/data/england/14.csv";
+    list << "../kpso/data/england/15.csv";
+  }
   return list;
 }
 
-QString GetCurrentSeasonFileName()
+QStringList GetChampNames()
 {
-//  return QString("../kpso/data/russia/15.csv");
-  return QString("../kpso/data/england/15.csv");
+  QStringList list;
+  list << "russia";
+  list << "england";
+  return list;
 }
 
 CStandardItemModel* CFootbolManager::AddTable(const QString& tableName)
@@ -166,14 +187,4 @@ CStandardItemModel* CFootbolManager::AddTable(const QString& tableName)
   table->SetView(view);
   m_pData->ui.tabWidget->addTab(view, tableName);
   return table;
-}
-
-QStringList GetLastNames()
-{
-  Season last = ReadFile(GetCurrentSeasonFileName());
-  QSet<QString> teams;
-  foreach(CMatch match, last)
-    teams << match.name;
-
-  return teams.toList();
 }
