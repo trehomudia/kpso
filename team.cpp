@@ -129,37 +129,43 @@ Season ReadFile(QString fileName)
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     return Season();
 
-  int seasonNum = fileName.remove("../statistica/seasons/data").remove(".csv").toInt();
+  fileName.remove(".csv");
+  int seasonNum = fileName.remove(0, fileName.size() - 2).toInt();
 
   QTextStream in(&file);
   Season season;
   while (!in.atEnd())
   {
-    QStringList line = in.readLine().split(",");
+    QString str = in.readLine();
+    str.remove(" ");
+    QStringList line = str.split(",");
 
-    CMatch match1;
-    match1.season = seasonNum;
-    match1.tur = line[0].toInt();
-    match1.name = line[1];
-    if (line[3].toInt() > line[4].toInt())
-      match1.score = 1;
-    else if (line[3].toInt() == line[4].toInt())
-      match1.score = 0;
-    else
-      match1.score = -1;
-    season << match1;
+    if (line[3] != "-" && line[4] != "-")
+    {
+      CMatch match1;
+      match1.season = seasonNum;
+      match1.tur = line[0].toInt();
+      match1.name = line[1];
+      if (line[3].toInt() > line[4].toInt())
+        match1.score = 1;
+      else if (line[3].toInt() == line[4].toInt())
+        match1.score = 0;
+      else
+        match1.score = -1;
+      season << match1;
 
-    CMatch match2;
-    match2.season = seasonNum;
-    match2.tur = line[0].toInt();
-    match2.name = line[2];
-    if (line[3].toInt() > line[4].toInt())
-      match2.score = -1;
-    else if (line[3].toInt() == line[4].toInt())
-      match2.score = 0;
-    else
-      match2.score = 1;
-    season << match2;
+      CMatch match2;
+      match2.season = seasonNum;
+      match2.tur = line[0].toInt();
+      match2.name = line[2];
+      if (line[3].toInt() > line[4].toInt())
+        match2.score = -1;
+      else if (line[3].toInt() == line[4].toInt())
+        match2.score = 0;
+      else
+        match2.score = 1;
+      season << match2;
+    }
   }
   file.close();
   return season;

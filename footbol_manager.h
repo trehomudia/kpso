@@ -17,7 +17,6 @@ public:
   ~CFootbolManager();
   void Do();
 
-
 private:
   class PrivateData;
   PrivateData* m_pData;

@@ -103,6 +103,9 @@ void CFootbolManager::ShowSource()
 
 void CFootbolManager::SetVisibleColumns(QStringList names)
 {
+  if (names.isEmpty())
+    return;
+
   CTableViewWd* view;
   for(int i = 0; i < m_pData->ui.tabWidget->count(); ++i)
     if (m_pData->ui.tabWidget->tabText(i) == tr("Общий результат"))
@@ -111,7 +114,7 @@ void CFootbolManager::SetVisibleColumns(QStringList names)
   CStandardItemModel* model = qobject_cast<CStandardItemModel*>(view->model());
   for(int i = 0; i < model->columnCount(); ++i)
   {
-    if(!GetLastNames().contains(model->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString()))
+    if(!names.contains(model->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString()))
     {
       view->horizontalHeader()->setSectionHidden(i, true);
     }
@@ -121,25 +124,37 @@ void CFootbolManager::SetVisibleColumns(QStringList names)
 QStringList GetFileNames()
 {
   QStringList list;
-  list << "../kpso/data/russia/02.csv";
-  list << "../kpso/data/russia/03.csv";
-  list << "../kpso/data/russia/04.csv";
-  list << "../kpso/data/russia/05.csv";
-  list << "../kpso/data/russia/06.csv";
-  list << "../kpso/data/russia/07.csv";
-  list << "../kpso/data/russia/08.csv";
-  list << "../kpso/data/russia/09.csv";
-  list << "../kpso/data/russia/10.csv";
-  list << "../kpso/data/russia/11.csv";
-  list << "../kpso/data/russia/12.csv";
-  list << "../kpso/data/russia/13.csv";
-  list << "../kpso/data/russia/14.csv";
+//  list << "../kpso/data/russia/02.csv";
+//  list << "../kpso/data/russia/03.csv";
+//  list << "../kpso/data/russia/04.csv";
+//  list << "../kpso/data/russia/05.csv";
+//  list << "../kpso/data/russia/06.csv";
+//  list << "../kpso/data/russia/07.csv";
+//  list << "../kpso/data/russia/08.csv";
+//  list << "../kpso/data/russia/09.csv";
+//  list << "../kpso/data/russia/10.csv";
+//  list << "../kpso/data/russia/11.csv";
+//  list << "../kpso/data/russia/12.csv";
+//  list << "../kpso/data/russia/13.csv";
+//  list << "../kpso/data/russia/14.csv";
+//  list << "../kpso/data/russia/15.csv";
+  list << "../kpso/data/england/06.csv";
+  list << "../kpso/data/england/07.csv";
+  list << "../kpso/data/england/08.csv";
+  list << "../kpso/data/england/09.csv";
+  list << "../kpso/data/england/10.csv";
+  list << "../kpso/data/england/11.csv";
+  list << "../kpso/data/england/12.csv";
+  list << "../kpso/data/england/13.csv";
+  list << "../kpso/data/england/14.csv";
+  list << "../kpso/data/england/15.csv";
   return list;
 }
 
 QString GetCurrentSeasonFileName()
 {
-  return QString("../kpso/data/russia/15.csv");
+//  return QString("../kpso/data/russia/15.csv");
+  return QString("../kpso/data/england/15.csv");
 }
 
 CStandardItemModel* CFootbolManager::AddTable(const QString& tableName)
