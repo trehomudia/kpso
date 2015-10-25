@@ -356,10 +356,10 @@ QStringList GetFileNames(const QString& champName)
 QStringList GetChampNames()
 {
   QStringList list;
-  list << "russia";
-  list << "england";
+  //list << "russia";
+  //list << "england";
   list << "spain";
-  list << "italy";
+  //list << "italy";
   return list;
 }
 
