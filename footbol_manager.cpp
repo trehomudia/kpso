@@ -336,6 +336,20 @@ QStringList GetFileNames(const QString& champName)
     list << "../kpso/data/spain/14.csv";
     list << "../kpso/data/spain/15.csv";
   }
+  else if(champName == "italy")
+  {
+    list << "../kpso/data/italy/06.csv";
+    list << "../kpso/data/italy/07.csv";
+    list << "../kpso/data/italy/08.csv";
+    list << "../kpso/data/italy/09.csv";
+    list << "../kpso/data/italy/10.csv";
+    list << "../kpso/data/italy/11.csv";
+    list << "../kpso/data/italy/12.csv";
+    list << "../kpso/data/italy/13.csv";
+    list << "../kpso/data/italy/14.csv";
+    list << "../kpso/data/italy/15.csv";
+  }
+
   return list;
 }
 
@@ -345,6 +359,7 @@ QStringList GetChampNames()
   list << "russia";
   list << "england";
   list << "spain";
+  list << "italy";
   return list;
 }
 
