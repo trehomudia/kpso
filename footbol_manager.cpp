@@ -357,8 +357,8 @@ QStringList GetChampNames()
 {
   QStringList list;
   //list << "russia";
-  //list << "england";
-  list << "spain";
+  list << "england";
+  //list << "spain";
   //list << "italy";
   return list;
 }
