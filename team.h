@@ -11,7 +11,8 @@ struct CMatch
   int season;
   int tur;
   QString name;
-  int score;
+  int point;
+  QString opponent;
 };
 
 typedef QVector<CMatch> Season;
@@ -27,16 +28,27 @@ public:
   QString GetName();
   int GetResult(int typeResult);
   void FormData();
-  void FormParity();
-  void FormNoParity();
+  void FormParityAll();
+  void FormNoParityAll();
+  void FormPointCommon();
+  void FormDataCommon();
   QMap<int, Season> seasons;
+  QVector<int> Parityes() {return parityesAll;}
+  QVector<int> NoParityes() {return noParityesAll;}
+  QVector<int> NoParityesCommon() {return noParityesCommon;}
+  int PointsCommon() {return pointsCommon;}
+  void SetConcurents(QVector<QString> concurents) {m_concurents = concurents;}
 
 private:
   int GetNoParity();
   int GetParity();
   QString m_name;
-  QVector<int> parityes;
-  QVector<int> noParityes;
+  int positionCommon;
+  int pointsCommon;
+  QVector<int> parityesAll;
+  QVector<int> noParityesAll;
+  QVector<int> noParityesCommon;
+  QVector<QString> m_concurents;
 };
 
 const int NO_PARITY = 0;

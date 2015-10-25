@@ -25,6 +25,7 @@ private:
 
   void FormTeams(Season season, const QString& champName);
   void FormDataTeams();
+  void AnalizeCommonPosition();
   void ReadFiles();
   void ShowSource();
   void CommonResult();
