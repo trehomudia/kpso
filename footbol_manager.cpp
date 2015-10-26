@@ -349,6 +349,32 @@ QStringList GetFileNames(const QString& champName)
     list << "../kpso/data/italy/14.csv";
     list << "../kpso/data/italy/15.csv";
   }
+  else if(champName == "germany")
+  {
+    list << "../kpso/data/germany/06.csv";
+    list << "../kpso/data/germany/07.csv";
+    list << "../kpso/data/germany/08.csv";
+    list << "../kpso/data/germany/09.csv";
+    list << "../kpso/data/germany/10.csv";
+    list << "../kpso/data/germany/11.csv";
+    list << "../kpso/data/germany/12.csv";
+    list << "../kpso/data/germany/13.csv";
+    list << "../kpso/data/germany/14.csv";
+    list << "../kpso/data/germany/15.csv";
+  }
+  else if(champName == "france")
+  {
+    list << "../kpso/data/france/06.csv";
+    list << "../kpso/data/france/07.csv";
+    list << "../kpso/data/france/08.csv";
+    list << "../kpso/data/france/09.csv";
+    list << "../kpso/data/france/10.csv";
+    list << "../kpso/data/france/11.csv";
+    list << "../kpso/data/france/12.csv";
+    list << "../kpso/data/france/13.csv";
+    list << "../kpso/data/france/14.csv";
+    list << "../kpso/data/france/15.csv";
+  }
 
   return list;
 }
@@ -357,9 +383,11 @@ QStringList GetChampNames()
 {
   QStringList list;
   //list << "russia";
-  list << "england";
+  //list << "england";
   //list << "spain";
   //list << "italy";
+  //list << "germany";
+  list << "france";
   return list;
 }
 
