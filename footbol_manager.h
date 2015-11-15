@@ -21,6 +21,7 @@ private:
   PrivateData* m_pData;
 
   void FormDataTeams();
+  void FormRates();
   void AnalizeCommonPosition();
   void ShowSource();
   void CommonResult();

@@ -1,12 +1,10 @@
 #include "team.h"
 #include <QSet>
-#include <QFile>
-#include <QTextStream>
 #include <QPair>
 
 CTeam::CTeam(const QString& name)
   : m_name(name)
-  , positionCommon(-1)
+  , cashParityPosition(0)
   , pointsCommon(0)
 {}
 
@@ -15,20 +13,6 @@ CTeam::CTeam()
 
 CTeam::~CTeam()
 {}
-
-int CTeam::GetNoParity()
-{
-  QVector<int> v = noParityesAll;
-  qSort(v);
-  return v.last();
-}
-
-int CTeam::GetParity()
-{
-  QVector<int> v = parityesAll;
-  qSort(v);
-  return v.last();
-}
 
 void CTeam::SetName(const QString &name)
 {
@@ -40,46 +24,10 @@ QString CTeam::GetName()
   return m_name;
 }
 
-void CTeam::FormParityAll()
-{
-  int parity = 0;
-  foreach(CMatch match, SelectTeamData(seasons))
-  {
-    if(match.point == 1)
-    {
-      parity++;
-    }
-    else
-    {
-      if (parity != 0)
-        parityesAll << parity;
-      parity = 0;
-    }
-  }
-}
-
-void CTeam::FormNoParityAll()
-{
-  int noParity = 0;
-  foreach(CMatch match, SelectTeamData(seasons))
-  {
-    if(match.point != 1)
-    {
-      noParity++;
-    }
-    else
-    {
-      if (noParity != 0)
-        noParityesAll << noParity;
-      noParity = 0;
-    }
-  }
-}
-
 void CTeam::FormPointCommon()
 {
   pointsCommon = 0;
-  foreach(CMatch match, SelectTeamData(seasons))
+  foreach(CMatch match, SelectTeamData(GetSeasons()))
   {
     pointsCommon += match.point;
   }
@@ -87,15 +35,42 @@ void CTeam::FormPointCommon()
 
 void CTeam::FormData()
 {
-  FormParityAll();
-  FormNoParityAll();
   FormPointCommon();
+}
+
+void CTeam::FindCurrentCashParity()
+{
+  QVector<int> matchs;
+  foreach(int season, m_seasons.keys())
+    foreach(CMatch match, m_seasons.value(season))
+      matchs << match.point;
+
+  for(int i = matchs.count() - 1; i >= 0; --i)
+  {
+    if(matchs.value(i) != PARITY)
+      cashParityPosition++;
+    else
+      i = 0;
+  }
+}
+
+void CTeam::SetCurrentCashParity(int numCash)
+{
+  cashParityPosition = numCash;
+}
+
+int CTeam::CurrentCash(int type)
+{
+  if (PARITY == type)
+    return cashList.value(cashParityPosition);
+
+  return -1;
 }
 
 void CTeam::FormDataCommon()
 {
   int noParity = 0;
-  foreach(CMatch match, SelectTeamData(seasons))
+  foreach(CMatch match, SelectTeamData(GetSeasons()))
   {
     if (m_concurents.contains(match.opponent))
     {
@@ -105,8 +80,7 @@ void CTeam::FormDataCommon()
       }
       else
       {
-        if (noParity != 0)
-          noParityesCommon << noParity;
+        noParityesCommon << noParity;
         noParity = 0;
       }
     }
@@ -115,10 +89,7 @@ void CTeam::FormDataCommon()
 
 int CTeam::GetResult(int typeResult)
 {
-  if (typeResult == NO_PARITY)
-    return GetNoParity();
-  else if (typeResult == PARITY)
-    return GetParity();
+  return 0;
 }
 
 Season SelectTeamData(const QMap<int, Season>& data)
@@ -149,59 +120,9 @@ void CStandardItemModel::SetColumns(const QStringList &names)
   setHorizontalHeaderLabels(names);
 }
 
-void CStandardItemModel::PrintCommonResult(CTeam team, int numPrint)
+void CStandardItemModel::PrintCommonResult(CTeam team, int numPrint, int typeOutcome)
 {
   for(int i = 0; i < columnCount(); ++i)
     if (team.GetName() == horizontalHeaderItem(i)->data(Qt::DisplayRole).toString())
-      setItem(numPrint, i, new QStandardItem(QString::number(team.GetResult(numPrint))));
-}
-
-Season ReadFile(QString fileName)
-{
-  QFile file(fileName);
-  if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    return Season();
-
-  fileName.remove(".csv");
-  int seasonNum = fileName.remove(0, fileName.size() - 2).toInt();
-
-  QTextStream in(&file);
-  Season season;
-  while (!in.atEnd())
-  {
-    QString str = in.readLine();
-    str.remove(" ");
-    QStringList line = str.split(",");
-
-    if (line[3] != "-" && line[4] != "-")
-    {
-      CMatch match1;
-      match1.season = seasonNum;
-      match1.tur = line[0].toInt();
-      match1.name = line[1];
-      match1.opponent = line[2];
-      if (line[3].toInt() > line[4].toInt())
-        match1.point = 3;
-      else if (line[3].toInt() == line[4].toInt())
-        match1.point = 1;
-      else
-        match1.point = 0;
-      season << match1;
-
-      CMatch match2;
-      match2.season = seasonNum;
-      match2.tur = line[0].toInt();
-      match2.name = line[2];
-      match2.opponent = line[1];
-      if (line[3].toInt() > line[4].toInt())
-        match2.point = 0;
-      else if (line[3].toInt() == line[4].toInt())
-        match2.point = 1;
-      else
-        match2.point = 3;
-      season << match2;
-    }
-  }
-  file.close();
-  return season;
+      setItem(numPrint, i, new QStandardItem(QString::number(team.CurrentCash(typeOutcome))));
 }

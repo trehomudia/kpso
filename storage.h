@@ -13,11 +13,16 @@ class CStorage : public QObject
 public:
   CStorage(QObject *parent = 0);
   ~CStorage();
-  QStringList GetFileNames(const QString& champName);
+  QStringList GetFileNames(const QString& champName, int confidentialSeasons = 0);
   QStringList GetChampNames();
   void FormTeams(Season season, const QString& champName, QMap<QString, Championat>& championats);
-  QMap<QString, Championat> ReadFiles();
+  QMap<QString, Championat> ReadFiles(int confidentialSeasons);
   QStringList GetTeamNames(const QString& champName, const QMap<QString, Championat>& championats);
+  bool RateIsEmpty(QString champName);
+  Season ReadFile(QString fileName);
+
+  void AddTeam(CTeam team, QString champName, int type);
+  int ReadCurrentRate(CTeam team, QString champName, int type);
 };
 
 #endif // CSTORAGE_H
