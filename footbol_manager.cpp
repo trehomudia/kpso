@@ -5,7 +5,7 @@
 #include <QStandardItemModel>
 
 const int deltaConcurent = 3;
-const int confidentialSeasons = 3;
+const int confidentialSeasons = 2;
 const int parityColumn = 0;
 
 class CFootbolManager::PrivateData
@@ -15,12 +15,13 @@ public:
   ~PrivateData(){}
 
   QMap<QString, Championat> championats;
+  QMap<QString, NextTur> nextTurs;
   Ui::statistica ui;
   CStorage storage;
 };
 
 CFootbolManager::CFootbolManager(QWidget *parent)
-  : QDialog(parent)
+  : QMainWindow(parent)
 {
   m_pData = new PrivateData();
   m_pData->ui.setupUi(this);
@@ -31,24 +32,10 @@ CFootbolManager::~CFootbolManager()
   delete m_pData;
 }
 
-void CFootbolManager::CommonResult()
-{
-  foreach(QString champName, m_pData->championats.keys())
-  {
-    CStandardItemModel* table = AddTable(tr("Общий результат: ") + champName);
-    table->SetColumns(m_pData->storage.GetTeamNames(champName, m_pData->championats));
-    table->setVerticalHeaderLabels(QStringList() << tr("Ничьи"));
-    foreach(CTeam team, m_pData->championats.value(champName))
-    {
-      //table->PrintCommonResult(team, NO_PARITY);
-      table->PrintCommonResult(team, parityColumn, PARITY);
-    }
-  }
-}
-
 void CFootbolManager::Do()
 {
   m_pData->championats = m_pData->storage.ReadFiles(confidentialSeasons);
+  m_pData->nextTurs = m_pData->storage.ReadNext();
   FormDataTeams();
   FormRates();
   ShowSource();
@@ -63,29 +50,50 @@ void CFootbolManager::FormRates()
       //в случае отсутствия или пустоты файлов формирование номеров ставок
       for(int i = 0; i < m_pData->championats[champName].count(); ++i)
         m_pData->championats[champName][i].FindCurrentCashParity();
+      QVector<QString> list = GetSortNextNames(champName);
 
-      Championat ch = m_pData->storage.ReadFiles(1).last();
-      QVector<QString> list;
-      foreach(CTeam team, ch)
-        list << team.GetName();
-
-      foreach(CTeam team, m_pData->championats[champName])
+      for(int i = 0; i < list.count(); ++i)
       {
-        if (list.contains(team.GetName()))
-          m_pData->storage.AddTeam(team, champName, PARITY);
+        if (m_pData->championats[champName][i].GetName() == list[i])
+        {
+          m_pData->storage.AddTeam(m_pData->championats[champName][i], champName, PARITY);
+        }
+        else
+        {
+          m_pData->championats[champName][i].SetName(list[i]);
+          m_pData->storage.AddTeam(m_pData->championats[champName][i], champName, PARITY);
+        }
       }
     }
     else
     {
-      //если файлы заполнены то считываем номера ставок
-      for(int i = 0; i < m_pData->championats[champName].count(); ++i)
-        m_pData->championats[champName][i].SetCurrentCashParity(m_pData->storage.ReadCurrentRate(m_pData->championats[champName][i], champName, PARITY));
+      QVector<QString> list = GetSortNextNames(champName);
+
+      for(int i = 0; i < list.count(); ++i)
+      {
+        int numCashParity = m_pData->storage.ReadCurrentRate(list[i], champName, PARITY);
+        if (-1 != numCashParity && list[i] == m_pData->championats[champName][i].GetName())
+        {
+          m_pData->championats[champName][i].SetCurrentCashParity(numCashParity);
+        }
+        else
+        {
+          for(int j = 0; j < m_pData->championats[champName].count(); ++j)
+            m_pData->championats[champName][j].ExchengeConcurents(m_pData->championats[champName][i].GetName(), list[i]);
+
+          m_pData->storage.ExchangeName(m_pData->championats[champName][i].GetName(), champName, PARITY, list[i]);
+          m_pData->championats[champName][i].SetName(list[i]);
+          m_pData->championats[champName][i].SetCurrentCashParity(m_pData->storage.ReadCurrentRate(m_pData->championats[champName][i].GetName(), champName, PARITY));
+        }
+      }
+
     }
   }
 }
 
 void CFootbolManager::AnalizeCommonPosition()
 {
+  //сортировка команд по очкам
   foreach(QString champName, m_pData->championats.keys())
   {
     for(int i = 0; i < m_pData->championats[champName].count(); ++i)
@@ -98,10 +106,18 @@ void CFootbolManager::AnalizeCommonPosition()
           m_pData->championats[champName][j] = m_pData->championats[champName][i];
           m_pData->championats[champName][i] = team;
         }
+        else if(m_pData->championats[champName][j].PointsCommon() == m_pData->championats[champName][i].PointsCommon() &&
+                m_pData->championats[champName][j].Differince() > m_pData->championats[champName][i].Differince())
+        {
+          CTeam team = m_pData->championats[champName][j];
+          m_pData->championats[champName][j] = m_pData->championats[champName][i];
+          m_pData->championats[champName][i] = team;
+        }
       }
     }
   }
 
+  //поиск конкурентов
   foreach(QString champName, m_pData->championats.keys())
   {
     for(int i = 0; i < m_pData->championats[champName].count(); ++i)
@@ -171,68 +187,151 @@ void CFootbolManager::FormDataTeams()
       map1.insert(i, 0);
   }
 
-  foreach(int count, map1.keys())
+//  foreach(int count, map1.keys())
+//  {
+//    int plus = 0;
+//    int minus = 0;
+//    int mCount = 0;
+
+//    while((count - cashList.count() * mCount) >= cashList.count())
+//      mCount++;
+
+//    plus = map1.value(count) * cashList.value(count - cashList.count() * mCount) * koef;
+
+//    while(mCount >= 0)
+//    {
+//      for(int i = 0; i <= count - cashList.count() * mCount; ++i)
+//        minus += map1.value(count) * cashList.value(i);
+//      --mCount;
+//    }
+//    cash += plus - minus;
+//  }
+
+//  int g = cashList.count();
+//  int k = g;
+}
+
+QVector<QString> CFootbolManager::GetSortNextNames(QString champName)
+{
+  QVector<QString> names;
+  for(int i = 0; i < m_pData->nextTurs.value(champName).count(); ++i)
   {
-    int plus = 0;
-    int minus = 0;
-    int mCount = 0;
-
-    while((count - cashList.count() * mCount) >= cashList.count())
-      mCount++;
-
-    plus = map1.value(count) * cashList.value(count - cashList.count() * mCount) * koef;
-
-    while(mCount >= 0)
-    {
-      for(int i = 0; i <= count - cashList.count() * mCount; ++i)
-        minus += map1.value(count) * cashList.value(i);
-      --mCount;
-    }
-    cash += plus - minus;
+    names << m_pData->nextTurs.value(champName)[i].first;
+    names << m_pData->nextTurs.value(champName)[i].second;
   }
 
-  int g = cashList.count();
-  int k = g;
+  QVector<QString> sortNames;
+  sortNames.resize(names.size());
+  for(int i = 0; i < names.count(); ++i)
+  {
+    if (names.contains(m_pData->championats[champName][i].GetName()))
+      sortNames[i] = m_pData->championats[champName][i].GetName();
+  }
+
+  foreach(QString name, sortNames)
+  {
+    if(names.contains(name))
+      names.remove(names.indexOf(name));
+  }
+
+  for(int i = 0; i < sortNames.count(); ++i)
+  {
+    if (sortNames[i].isEmpty())
+    {
+      sortNames[i] = names.first();
+      names.remove(0);
+    }
+  }
+
+  return sortNames;
 }
 
 void CFootbolManager::ShowSource()
 {
-  CommonResult();
   foreach(QString champName, m_pData->championats.keys())
-    SetVisibleColumns(champName);
-}
-
-void CFootbolManager::SetVisibleColumns(const QString& champName)
-{
-  CTableViewWd* view;
-  for(int i = 0; i < m_pData->ui.tabWidget->count(); ++i)
-    if (m_pData->ui.tabWidget->tabText(i) == (tr("Общий результат: ") + champName))
-      view = qobject_cast<CTableViewWd*>(m_pData->ui.tabWidget->widget(i));
-
-  QSet<QString> set;
-  Season season = m_pData->storage.ReadFile(m_pData->storage.GetFileNames(champName).last());
-  foreach(CMatch match, season)
-    set << match.name;
-
-  QStringList names = set.toList();
-
-  CStandardItemModel* model = qobject_cast<CStandardItemModel*>(view->model());
-  for(int i = 0; i < model->columnCount(); ++i)
   {
-    if(!names.contains(model->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString()))
+    CWidget* table = AddTable(champName);
+    CStandardItemModel* modelCommon = table->TableCommon();
+    modelCommon->SetColumns(GetSortNextNames(champName));
+    modelCommon->setVerticalHeaderLabels(QStringList() << tr("Ничьи"));
+    foreach(CTeam team, m_pData->championats.value(champName))
     {
-      view->horizontalHeader()->setSectionHidden(i, true);
+      //table->PrintCommonResult(team, NO_PARITY);
+//      model->PrintCommonResult(team, parityColumn, PARITY);
+      modelCommon->PrintCommonResult(team.GetName(), parityColumn, team.CashParityPosition());
     }
+
+    CStandardItemModel* modelResult = table->TableResult();
+    modelResult->SetColumns(QVector<QString>() << QString("Команда1") << QString("Команда2") << QString("Ничья")<< QString("ХНичья"));
+    for(int i = 0; i < m_pData->nextTurs.value(champName).count(); ++i)
+    {
+      QColor color;
+      if(NOTREPORT == m_pData->storage.Report(champName, m_pData->nextTurs.value(champName)[i].first) && NOTREPORT == m_pData->storage.Report(champName, m_pData->nextTurs.value(champName)[i].second))
+        color = Qt::green;
+      else
+        color = Qt::red;
+
+      QStandardItem* item1 = new QStandardItem(m_pData->nextTurs[champName][i].first);
+      item1->setBackground(color);
+      modelResult->setItem(i, 0, item1);
+
+
+      QStandardItem* item2 = new QStandardItem(m_pData->nextTurs.value(champName)[i].second);
+      item2->setBackground(color);
+      modelResult->setItem(i, 1, item2);
+
+      CTeam team1;
+      foreach(CTeam t, m_pData->championats.value(champName))
+      {
+        if (m_pData->nextTurs.value(champName)[i].first == t.GetName())
+          team1 = t;
+      }
+
+      QStandardItem* item3 = new QStandardItem();
+      item3->setBackground(color);
+      if(team1.Concurents().contains(m_pData->nextTurs.value(champName)[i].second))
+      {
+        CTeam team2;
+        foreach(CTeam t, m_pData->championats.value(champName))
+        {
+          if (m_pData->nextTurs.value(champName)[i].second == t.GetName())
+            team2 = t;
+        }
+        item3->setData(QString::number(GetCash(team1.CashParityPosition(), PARITY) + GetCash(team2.CashParityPosition(), PARITY)), Qt::DisplayRole);
+      }
+      else
+      {
+        item3->setData(QString("--"), Qt::DisplayRole);
+      }
+      modelResult->setItem(i, 2, item3);
+    }
+
   }
 }
 
-CStandardItemModel* CFootbolManager::AddTable(const QString& tableName)
+void CFootbolManager::onChecked(const QModelIndex &index)
 {
-  CTableViewWd* view = new CTableViewWd(this);
-  view->setAllColumnsDelegate();
-  CStandardItemModel* table = new CStandardItemModel(this);
-  view->setModel(table);
-  table->SetView(view);
-  m_pData->ui.tabWidget->addTab(view, tableName);
-  return table;
+  CWidget* widget = qobject_cast<CWidget*>(sender());
+  CStandardItemModel* modelResult = widget->TableResult();
+  for(int i = 0; i < m_pData->nextTurs.value(widget->objectName()).count(); ++i)
+  {
+    if (m_pData->nextTurs.value(widget->objectName())[i].first == modelResult->item(index.row(), 0)->data(Qt::DisplayRole).toString()
+        && m_pData->nextTurs.value(widget->objectName())[i].second == modelResult->item(index.row(), 1)->data(Qt::DisplayRole).toString())
+    {
+      m_pData->storage.Reported(widget->objectName(), modelResult->item(index.row(), 0)->data(Qt::DisplayRole).toString(), REPORT);
+      m_pData->storage.Reported(widget->objectName(), modelResult->item(index.row(), 1)->data(Qt::DisplayRole).toString(), REPORT);
+      foreach(QStandardItem* item, modelResult->takeRow(index.row()))
+        item->setBackground(Qt::red);
+    }
+  }
+
+}
+
+CWidget* CFootbolManager::AddTable(const QString& tableName)
+{
+  CWidget* widget = new CWidget(this);
+  widget->setObjectName(tableName);
+  connect(widget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(onChecked(const QModelIndex&)));
+  m_pData->ui.tabWidget->addTab(widget, tableName);
+  return widget;
 }

@@ -24,4 +24,5 @@ HEADERS  += footbol_manager.h\
             storage.h\
             team.h
 
-FORMS    += footbol_manager.ui
+FORMS    += footbol_manager.ui\
+            championat_widget.ui

@@ -24,47 +24,52 @@ QString CTeam::GetName()
   return m_name;
 }
 
-void CTeam::FormPointCommon()
+void CTeam::ExchengeConcurents(QString concurent, QString distConcurent)
 {
-  pointsCommon = 0;
-  foreach(CMatch match, SelectTeamData(GetSeasons()))
+  if (-1 == m_concurents.indexOf(concurent))
   {
-    pointsCommon += match.point;
+    return;
+  }
+  else
+  {
+    m_concurents.remove(m_concurents.indexOf(concurent));
+    m_concurents << distConcurent;
   }
 }
 
 void CTeam::FormData()
 {
-  FormPointCommon();
+  pointsCommon = 0;
+  differince = 0;
+  foreach(CMatch match, SelectTeamData(GetSeasons()))
+  {
+    pointsCommon += match.point;
+    differince += match.difference;
+  }
 }
 
 void CTeam::FindCurrentCashParity()
 {
-  QVector<int> matchs;
+  QVector<CMatch> matchs;
   foreach(int season, m_seasons.keys())
     foreach(CMatch match, m_seasons.value(season))
-      matchs << match.point;
+      matchs << match;
 
   for(int i = matchs.count() - 1; i >= 0; --i)
   {
-    if(matchs.value(i) != PARITY)
-      cashParityPosition++;
-    else
-      i = 0;
+    if (m_concurents.contains(matchs[i].opponent))
+    {
+      if(matchs.value(i).point != PARITY)
+        cashParityPosition++;
+      else
+        i = 0;
+    }
   }
 }
 
 void CTeam::SetCurrentCashParity(int numCash)
 {
   cashParityPosition = numCash;
-}
-
-int CTeam::CurrentCash(int type)
-{
-  if (PARITY == type)
-    return cashList.value(cashParityPosition);
-
-  return -1;
 }
 
 void CTeam::FormDataCommon()
@@ -85,11 +90,6 @@ void CTeam::FormDataCommon()
       }
     }
   }
-}
-
-int CTeam::GetResult(int typeResult)
-{
-  return 0;
 }
 
 Season SelectTeamData(const QMap<int, Season>& data)
@@ -114,15 +114,69 @@ CTableViewWd* CStandardItemModel::GetView()
   return view;
 }
 
-void CStandardItemModel::SetColumns(const QStringList &names)
+void CStandardItemModel::SetColumns(const QVector<QString> &names)
 {
   setColumnCount(names.count());
-  setHorizontalHeaderLabels(names);
+  setHorizontalHeaderLabels(names.toList());
 }
 
-void CStandardItemModel::PrintCommonResult(CTeam team, int numPrint, int typeOutcome)
+//void CStandardItemModel::PrintCommonResult(CTeam team, int numPrint, int typeOutcome)
+//{
+//  for(int i = 0; i < columnCount(); ++i)
+//    if (team.GetName() == horizontalHeaderItem(i)->data(Qt::DisplayRole).toString())
+//      setItem(numPrint, i, new QStandardItem(QString::number(team.CurrentCash(typeOutcome))));
+//}
+
+void CStandardItemModel::PrintCommonResult(QString team, int numPrint, int value)
 {
   for(int i = 0; i < columnCount(); ++i)
-    if (team.GetName() == horizontalHeaderItem(i)->data(Qt::DisplayRole).toString())
-      setItem(numPrint, i, new QStandardItem(QString::number(team.CurrentCash(typeOutcome))));
+    if (team == horizontalHeaderItem(i)->data(Qt::DisplayRole).toString())
+      setItem(numPrint, i, new QStandardItem(QString::number(value)));
+}
+
+int GetCash(int num, int type)
+{
+  int value = 0;
+  if (type == PARITY)
+  {
+    if (num >= PARITY_LIMIT)
+      num -= PARITY_LIMIT;
+
+    value = cashListParity.value(num);
+  }
+  else if (type == NO_PARITY)
+  {
+    if (num >= NO_PARITY_LIMIT)
+      num -= NO_PARITY_LIMIT;
+
+    value = cashListNoParity.value(num);
+  }
+  return value;
+}
+
+CWidget::CWidget(QWidget *parent, Qt::WindowFlags f)
+  : Base(parent, f)
+{
+  ui.setupUi(this);
+  ui.commonView->setAllColumnsDelegate();
+  ui.resultView->setAllColumnsDelegate();
+  CStandardItemModel* tableCommon = new CStandardItemModel(this);
+  ui.commonView->setModel(tableCommon);
+  tableCommon->SetView(ui.commonView);
+  CStandardItemModel* tableResult = new CStandardItemModel(this);
+  ui.resultView->setModel(tableResult);
+  tableResult->SetView(ui.resultView);
+  connect(ui.resultView, SIGNAL(doubleClicked(const QModelIndex&)), this, SIGNAL(doubleClicked(const QModelIndex&)));
+}
+
+CStandardItemModel* CWidget::TableCommon()
+{
+  CStandardItemModel* model = qobject_cast<CStandardItemModel*>(ui.commonView->model());
+  return model;
+}
+
+CStandardItemModel* CWidget::TableResult()
+{
+  CStandardItemModel* model = qobject_cast<CStandardItemModel*>(ui.resultView->model());
+  return model;
 }

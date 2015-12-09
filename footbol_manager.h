@@ -1,13 +1,13 @@
 #ifndef STATISTICA_H
 #define STATISTICA_H
 
-#include <QDialog>
+#include <QMainWindow>
 #include "team.h"
 
 class QSplitter;
 class QStandardItemModel;
 
-class CFootbolManager : public QDialog
+class CFootbolManager : public QMainWindow
 {
   Q_OBJECT
 
@@ -15,6 +15,9 @@ public:
   explicit CFootbolManager(QWidget *parent = 0);
   ~CFootbolManager();
   void Do();
+
+public slots:
+  void onChecked(const QModelIndex & index);
 
 private:
   class PrivateData;
@@ -24,9 +27,8 @@ private:
   void FormRates();
   void AnalizeCommonPosition();
   void ShowSource();
-  void CommonResult();
-  void SetVisibleColumns(const QString& champName);
-  CStandardItemModel* AddTable(const QString& tableName);
+  CWidget* AddTable(const QString& tableName);
+  QVector<QString> GetSortNextNames(QString champName);
 };
 
 #endif // STATISTICA_H

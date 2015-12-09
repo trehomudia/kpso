@@ -5,6 +5,10 @@
 #include <QObject>
 
 typedef QVector<CTeam> Championat;
+typedef QVector<QPair<QString, QString> > NextTur;
+
+const int REPORT = 1001;
+const int NOTREPORT = 1000;
 
 class CStorage : public QObject
 {
@@ -20,9 +24,16 @@ public:
   QStringList GetTeamNames(const QString& champName, const QMap<QString, Championat>& championats);
   bool RateIsEmpty(QString champName);
   Season ReadFile(QString fileName);
-
   void AddTeam(CTeam team, QString champName, int type);
-  int ReadCurrentRate(CTeam team, QString champName, int type);
+  int ReadCurrentRate(QString teamName, QString champName, int type);
+  void ExchangeName(QString teamName, QString champName, int type, QString targetName);
+  QMap<QString, NextTur> ReadNext();
+  int Report(QString champName, QString teamName);
+  void Reported(QString champName, QString teamName, int value);
+
+private:
+  NextTur ReadNextTur(QString champName);
+  bool NextContainStr(NextTur nextTur, const QString& str);
 };
 
 #endif // CSTORAGE_H
