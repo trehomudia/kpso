@@ -167,6 +167,8 @@ CWidget::CWidget(QWidget *parent, Qt::WindowFlags f)
   ui.resultView->setModel(tableResult);
   tableResult->SetView(ui.resultView);
   connect(ui.resultView, SIGNAL(doubleClicked(const QModelIndex&)), this, SIGNAL(doubleClicked(const QModelIndex&)));
+  connect(ui.pushButton, SIGNAL(clicked()), this, SIGNAL(clicked()));
+  connect(this, SIGNAL(AllChecked(bool)), ui.pushButton, SLOT(setEnabled(bool)));
 }
 
 CStandardItemModel* CWidget::TableCommon()

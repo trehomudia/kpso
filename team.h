@@ -105,6 +105,8 @@ public:
 
 signals:
   void doubleClicked(const QModelIndex& index);
+  void clicked();
+  void AllChecked(bool);
 
 private:
   Ui::championatWidget ui;

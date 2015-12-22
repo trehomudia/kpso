@@ -68,7 +68,7 @@ void CFootbolManager::FormRates()
     else
     {
       QVector<QString> list = GetSortNextNames(champName);
-
+      AddValues(champName);
       for(int i = 0; i < list.count(); ++i)
       {
         int numCashParity = m_pData->storage.ReadCurrentRate(list[i], champName, PARITY);
@@ -89,6 +89,48 @@ void CFootbolManager::FormRates()
 
     }
   }
+}
+
+void CFootbolManager::AddValues(const QString& tableName)
+{
+  NextTur tur = m_pData->storage.ReadPlays(tableName);
+  int count = 0;
+  for (int i = 0; i < tur.count(); ++i)
+  {
+    foreach(CTeam team, m_pData->championats[tableName])
+    {
+      Season s = team.GetSeasons().last();
+      if (tur[i].first == team.GetName() && tur[i].second == s.last().opponent)
+      {
+        count++;
+      }
+    }
+  }
+
+  if (count != tur.count())
+    return;
+
+  for (int i = 0; i < tur.count(); ++i)
+  {
+    foreach(CTeam team, m_pData->championats[tableName])
+    {
+      Season s = team.GetSeasons().last();
+      if (tur[i].first == team.GetName() && tur[i].second == s.last().opponent && team.Concurents().contains(tur[i].second))
+      {
+        if(s.last().point == 1)
+        {
+          m_pData->storage.ExchangeRate(tur[i].first, tableName, PARITY, 0);
+          m_pData->storage.ExchangeRate(tur[i].second, tableName, PARITY, 0);
+        }
+        else
+        {
+          m_pData->storage.ExchangeRate(tur[i].first, tableName, PARITY, m_pData->storage.ReadCurrentRate(tur[i].first, tableName, PARITY) + 1);
+          m_pData->storage.ExchangeRate(tur[i].second, tableName, PARITY, m_pData->storage.ReadCurrentRate(tur[i].second, tableName, PARITY) + 1);
+        }
+      }
+    }
+  }
+  int g = 9;
 }
 
 void CFootbolManager::AnalizeCommonPosition()
@@ -262,7 +304,7 @@ void CFootbolManager::ShowSource()
     }
 
     CStandardItemModel* modelResult = table->TableResult();
-    modelResult->SetColumns(QVector<QString>() << QString("Команда1") << QString("Команда2") << QString("Ничья")<< QString("ХНичья"));
+    modelResult->SetColumns(QVector<QString>() << QString("Команда1") << QString("Команда2") << QString("Ничья")/* << QString("ХНичья")*/);
     for(int i = 0; i < m_pData->nextTurs.value(champName).count(); ++i)
     {
       QColor color;
@@ -304,6 +346,12 @@ void CFootbolManager::ShowSource()
         item3->setData(QString("--"), Qt::DisplayRole);
       }
       modelResult->setItem(i, 2, item3);
+
+
+//      QStandardItem* item4 = new QStandardItem(QString());
+//      item4->setBackground(color);
+//      modelResult->setItem(i, 3, item4);
+
     }
 
   }
@@ -320,11 +368,15 @@ void CFootbolManager::onChecked(const QModelIndex &index)
     {
       m_pData->storage.Reported(widget->objectName(), modelResult->item(index.row(), 0)->data(Qt::DisplayRole).toString(), REPORT);
       m_pData->storage.Reported(widget->objectName(), modelResult->item(index.row(), 1)->data(Qt::DisplayRole).toString(), REPORT);
-      foreach(QStandardItem* item, modelResult->takeRow(index.row()))
-        item->setBackground(Qt::red);
+      for(int j = 0; j < modelResult->columnCount(); ++j)
+        modelResult->item(i, j)->setBackground(Qt::red);
     }
   }
+}
 
+void CFootbolManager::onClicked()
+{
+  m_pData->storage.CreatePlays(sender()->objectName(), m_pData->nextTurs.value(sender()->objectName()));
 }
 
 CWidget* CFootbolManager::AddTable(const QString& tableName)
@@ -332,6 +384,8 @@ CWidget* CFootbolManager::AddTable(const QString& tableName)
   CWidget* widget = new CWidget(this);
   widget->setObjectName(tableName);
   connect(widget, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(onChecked(const QModelIndex&)));
+  connect(widget, SIGNAL(clicked()), this, SLOT(onClicked()));
+  connect(&m_pData->storage, SIGNAL(AllChecked(bool)), widget, SIGNAL(AllChecked(bool)));
   m_pData->ui.tabWidget->addTab(widget, tableName);
   return widget;
 }

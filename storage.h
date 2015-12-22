@@ -27,9 +27,16 @@ public:
   void AddTeam(CTeam team, QString champName, int type);
   int ReadCurrentRate(QString teamName, QString champName, int type);
   void ExchangeName(QString teamName, QString champName, int type, QString targetName);
+  void ExchangeRate(QString teamName, QString champName, int type, int targetValue);
   QMap<QString, NextTur> ReadNext();
   int Report(QString champName, QString teamName);
   void Reported(QString champName, QString teamName, int value);
+
+  void CreatePlays(QString champName, NextTur tur);
+  NextTur ReadPlays(QString champName);
+
+signals:
+  void AllChecked(bool);
 
 private:
   NextTur ReadNextTur(QString champName);

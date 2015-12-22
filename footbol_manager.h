@@ -18,6 +18,7 @@ public:
 
 public slots:
   void onChecked(const QModelIndex & index);
+  void onClicked();
 
 private:
   class PrivateData;
@@ -27,6 +28,7 @@ private:
   void FormRates();
   void AnalizeCommonPosition();
   void ShowSource();
+  void AddValues(const QString& tableName);
   CWidget* AddTable(const QString& tableName);
   QVector<QString> GetSortNextNames(QString champName);
 };

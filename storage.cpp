@@ -77,6 +77,7 @@ QStringList CStorage::GetFileNames(const QString& champName, int confidentialSea
 //    list << "../kpso/data/russia/15.csv";
     //list << "../kpso/data/russia/14!.csv";
     list << "../kpso/data/russia/15!.csv";
+//    list << "../kpso/data/russia/15!!.csv";
   }
   else if(champName == "england")
   {
@@ -332,6 +333,45 @@ void CStorage::ExchangeName(QString teamName, QString champName, int type, QStri
   file.close();
 }
 
+void CStorage::ExchangeRate(QString teamName, QString champName, int type, int targetValue)
+{
+  QString fileName("../kpso/rates/%1/%2.csv");
+  fileName = fileName.arg(champName);
+  if (PARITY == type)
+    fileName = fileName.arg("draw");
+
+  QFile file(fileName);
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    return;
+
+  QVector<QString> list;
+  QTextStream in(&file);
+  while (!in.atEnd())
+  {
+    list.push_back(in.readLine());
+  }
+  file.close();
+
+  for(int i = 0; i < list.count(); ++i)
+  {
+    if(list[i].contains(teamName))
+    {
+      QVector<QString> str = list[i].split(",").toVector();
+      str[1] = QString::number(targetValue);
+      list[i] = str[0] + QString(",") + str[1] + QString(",") + str[2];
+    }
+  }
+
+  if (!file.open(QIODevice::WriteOnly))
+    return;
+
+  QTextStream out(&file);
+  foreach(QString str, list)
+    out << str << "\n";
+
+  file.close();
+}
+
 NextTur CStorage::ReadNextTur(QString champName)
 {
   NextTur nextTur;
@@ -415,8 +455,15 @@ void CStorage::Reported(QString champName, QString teamName, int value)
   QTextStream out(&file);
   foreach(QString str, list)
     out << str << "\n";
-
   file.close();
+
+  bool allCheck = true;
+  foreach(QString str, list)
+    if(str.contains(QString::number(NOTREPORT)))
+      allCheck = false;
+
+  if (allCheck)
+    emit AllChecked(true);
 }
 
 bool CStorage::NextContainStr(NextTur nextTur, const QString &str)
@@ -434,4 +481,41 @@ QMap<QString, NextTur> CStorage::ReadNext()
   foreach(QString champName, GetChampNames())
     next.insert(champName, ReadNextTur(champName));
   return next;
+}
+
+void CStorage::CreatePlays(QString champName, NextTur tur)
+{
+  QString fileName("../kpso/rates/%1/temp.csv");
+  fileName = fileName.arg(champName);
+
+  QFile file(fileName);
+  if (!file.open(QIODevice::WriteOnly))
+    return;
+
+  QTextStream out(&file);
+  for(int i = 0; i < tur.count(); ++i)
+    out << tur[i].first << QString(",") << tur[i].second << "\n";
+
+  file.close();
+}
+
+NextTur CStorage::ReadPlays(QString champName)
+{
+  NextTur tur;
+  QString fileName("../kpso/rates/%1/temp.csv");
+  fileName = fileName.arg(champName);
+
+  QFile file(fileName);
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    return tur;
+
+  QTextStream in(&file);
+  while (!in.atEnd())
+  {
+    QVector<QString> str = in.readLine().split(",").toVector();
+    tur << QPair<QString, QString>(str.first(), str.last());
+  }
+
+  file.close();
+  return tur;
 }

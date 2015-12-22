@@ -31,6 +31,9 @@
    </property>
    <item>
     <widget class="QPushButton" name="pushButton">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="text">
       <string>Запись следующих ставок</string>
      </property>
@@ -41,6 +44,9 @@
    </item>
    <item>
     <widget class="CTableViewWd" name="resultView">
+     <property name="editTriggers">
+      <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::EditKeyPressed</set>
+     </property>
      <property name="selectionMode">
       <enum>QAbstractItemView::NoSelection</enum>
      </property>
