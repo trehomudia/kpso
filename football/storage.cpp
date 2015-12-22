@@ -61,88 +61,88 @@ QStringList CStorage::GetFileNames(const QString& champName, int confidentialSea
   QStringList list;
   if (champName == "russia")
   {
-    list << "../kpso/data/russia/02.csv";
-    list << "../kpso/data/russia/03.csv";
-    list << "../kpso/data/russia/04.csv";
-    list << "../kpso/data/russia/05.csv";
-    list << "../kpso/data/russia/06.csv";
-    list << "../kpso/data/russia/07.csv";
-    list << "../kpso/data/russia/08.csv";
-    list << "../kpso/data/russia/09.csv";
-    list << "../kpso/data/russia/10.csv";
-    list << "../kpso/data/russia/11.csv";
-    list << "../kpso/data/russia/12.csv";
-    list << "../kpso/data/russia/13.csv";
-    list << "../kpso/data/russia/14.csv";
-//    list << "../kpso/data/russia/15.csv";
-    //list << "../kpso/data/russia/14!.csv";
-    list << "../kpso/data/russia/15!.csv";
-//    list << "../kpso/data/russia/15!!.csv";
+    list << "../kpso/football/data/russia/02.csv";
+    list << "../kpso/football/data/russia/03.csv";
+    list << "../kpso/football/data/russia/04.csv";
+    list << "../kpso/football/data/russia/05.csv";
+    list << "../kpso/football/data/russia/06.csv";
+    list << "../kpso/football/data/russia/07.csv";
+    list << "../kpso/football/data/russia/08.csv";
+    list << "../kpso/football/data/russia/09.csv";
+    list << "../kpso/football/data/russia/10.csv";
+    list << "../kpso/football/data/russia/11.csv";
+    list << "../kpso/football/data/russia/12.csv";
+    list << "../kpso/football/data/russia/13.csv";
+    list << "../kpso/football/data/russia/14.csv";
+    list << "../kpso/football/data/russia/15.csv";
+    //list << "../kpso/football/data/russia/14!.csv";
+//    list << "../kpso/football/data/russia/15!.csv";
+//    list << "../kpso/football/data/russia/15!!.csv";
   }
   else if(champName == "england")
   {
-    list << "../kpso/data/england/06.csv";
-    list << "../kpso/data/england/07.csv";
-    list << "../kpso/data/england/08.csv";
-    list << "../kpso/data/england/09.csv";
-    list << "../kpso/data/england/10.csv";
-    list << "../kpso/data/england/11.csv";
-    list << "../kpso/data/england/12.csv";
-    list << "../kpso/data/england/13.csv";
-    list << "../kpso/data/england/14.csv";
-    list << "../kpso/data/england/15.csv";
+    list << "../kpso/football/data/england/06.csv";
+    list << "../kpso/football/data/england/07.csv";
+    list << "../kpso/football/data/england/08.csv";
+    list << "../kpso/football/data/england/09.csv";
+    list << "../kpso/football/data/england/10.csv";
+    list << "../kpso/football/data/england/11.csv";
+    list << "../kpso/football/data/england/12.csv";
+    list << "../kpso/football/data/england/13.csv";
+    list << "../kpso/football/data/england/14.csv";
+    list << "../kpso/football/data/england/15.csv";
   }
   else if(champName == "spain")
   {
-    list << "../kpso/data/spain/06.csv";
-    list << "../kpso/data/spain/07.csv";
-    list << "../kpso/data/spain/08.csv";
-    list << "../kpso/data/spain/09.csv";
-    list << "../kpso/data/spain/10.csv";
-    list << "../kpso/data/spain/11.csv";
-    list << "../kpso/data/spain/12.csv";
-    list << "../kpso/data/spain/13.csv";
-    list << "../kpso/data/spain/14.csv";
-    list << "../kpso/data/spain/15.csv";
+    list << "../kpso/football/data/spain/06.csv";
+    list << "../kpso/football/data/spain/07.csv";
+    list << "../kpso/football/data/spain/08.csv";
+    list << "../kpso/football/data/spain/09.csv";
+    list << "../kpso/football/data/spain/10.csv";
+    list << "../kpso/football/data/spain/11.csv";
+    list << "../kpso/football/data/spain/12.csv";
+    list << "../kpso/football/data/spain/13.csv";
+    list << "../kpso/football/data/spain/14.csv";
+    list << "../kpso/football/data/spain/15.csv";
   }
   else if(champName == "italy")
   {
-    list << "../kpso/data/italy/06.csv";
-    list << "../kpso/data/italy/07.csv";
-    list << "../kpso/data/italy/08.csv";
-    list << "../kpso/data/italy/09.csv";
-    list << "../kpso/data/italy/10.csv";
-    list << "../kpso/data/italy/11.csv";
-    list << "../kpso/data/italy/12.csv";
-    list << "../kpso/data/italy/13.csv";
-    list << "../kpso/data/italy/14.csv";
-    list << "../kpso/data/italy/15.csv";
+    list << "../kpso/football/data/italy/06.csv";
+    list << "../kpso/football/data/italy/07.csv";
+    list << "../kpso/football/data/italy/08.csv";
+    list << "../kpso/football/data/italy/09.csv";
+    list << "../kpso/football/data/italy/10.csv";
+    list << "../kpso/football/data/italy/11.csv";
+    list << "../kpso/football/data/italy/12.csv";
+    list << "../kpso/football/data/italy/13.csv";
+    list << "../kpso/football/data/italy/14.csv";
+    list << "../kpso/football/data/italy/15.csv";
   }
   else if(champName == "germany")
   {
-    list << "../kpso/data/germany/06.csv";
-    list << "../kpso/data/germany/07.csv";
-    list << "../kpso/data/germany/08.csv";
-    list << "../kpso/data/germany/09.csv";
-    list << "../kpso/data/germany/10.csv";
-    list << "../kpso/data/germany/11.csv";
-    list << "../kpso/data/germany/12.csv";
-    list << "../kpso/data/germany/13.csv";
-    list << "../kpso/data/germany/14.csv";
-    list << "../kpso/data/germany/15.csv";
+    list << "../kpso/football/data/germany/06.csv";
+    list << "../kpso/football/data/germany/07.csv";
+    list << "../kpso/football/data/germany/08.csv";
+    list << "../kpso/football/data/germany/09.csv";
+    list << "../kpso/football/data/germany/10.csv";
+    list << "../kpso/football/data/germany/11.csv";
+    list << "../kpso/football/data/germany/12.csv";
+    list << "../kpso/football/data/germany/13.csv";
+    list << "../kpso/football/data/germany/14.csv";
+    list << "../kpso/football/data/germany/15.csv";
   }
   else if(champName == "france")
   {
-    list << "../kpso/data/france/06.csv";
-    list << "../kpso/data/france/07.csv";
-    list << "../kpso/data/france/08.csv";
-    list << "../kpso/data/france/09.csv";
-    list << "../kpso/data/france/10.csv";
-    list << "../kpso/data/france/11.csv";
-    list << "../kpso/data/france/12.csv";
-    list << "../kpso/data/france/13.csv";
-    list << "../kpso/data/france/14.csv";
-    list << "../kpso/data/france/15.csv";
+    list << "../kpso/football/data/france/06.csv";
+    list << "../kpso/football/data/france/07.csv";
+    list << "../kpso/football/data/france/08.csv";
+    list << "../kpso/football/data/france/09.csv";
+    list << "../kpso/football/data/france/10.csv";
+    list << "../kpso/football/data/france/11.csv";
+    list << "../kpso/football/data/france/12.csv";
+    list << "../kpso/football/data/france/13.csv";
+    list << "../kpso/football/data/france/14.csv";
+    list << "../kpso/football/data/france/15.csv";
   }
 
   if (0 == confidentialSeasons)
@@ -166,7 +166,7 @@ QStringList CStorage::GetChampNames()
 bool CStorage::RateIsEmpty(QString champName)
 {
   QDir dir(QDir::current());
-  dir.cd(QString("../kpso"));
+  dir.cd(QString("../kpso/football"));
 
   while(!dir.cd(QString("rates")))
     dir.mkdir(QString("rates"));
@@ -174,7 +174,7 @@ bool CStorage::RateIsEmpty(QString champName)
   while(!dir.cd(champName))
     dir.mkdir(champName);
 
-  QString fileName("../kpso/rates/%1/draw.csv");
+  QString fileName("../kpso/football/rates/%1/draw.csv");
   fileName = fileName.arg(champName);
   QFile file(fileName);
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -256,7 +256,7 @@ Season CStorage::ReadFile(QString fileName)
 
 void CStorage::AddTeam(CTeam team, QString champName, int type)
 {
-  QString fileName("../kpso/rates/%1/%2.csv");
+  QString fileName("../kpso/football/rates/%1/%2.csv");
   fileName = fileName.arg(champName);
   if (PARITY == type)
     fileName = fileName.arg("draw");
@@ -273,7 +273,7 @@ void CStorage::AddTeam(CTeam team, QString champName, int type)
 
 int CStorage::ReadCurrentRate(QString teamName, QString champName, int type)
 {
-  QString fileName("../kpso/rates/%1/%2.csv");
+  QString fileName("../kpso/football/rates/%1/%2.csv");
   fileName = fileName.arg(champName);
   if (PARITY == type)
     fileName = fileName.arg("draw");
@@ -300,7 +300,7 @@ int CStorage::ReadCurrentRate(QString teamName, QString champName, int type)
 
 void CStorage::ExchangeName(QString teamName, QString champName, int type, QString targetName)
 {
-  QString fileName("../kpso/rates/%1/%2.csv");
+  QString fileName("../kpso/football/rates/%1/%2.csv");
   fileName = fileName.arg(champName);
   if (PARITY == type)
     fileName = fileName.arg("draw");
@@ -335,7 +335,7 @@ void CStorage::ExchangeName(QString teamName, QString champName, int type, QStri
 
 void CStorage::ExchangeRate(QString teamName, QString champName, int type, int targetValue)
 {
-  QString fileName("../kpso/rates/%1/%2.csv");
+  QString fileName("../kpso/football/rates/%1/%2.csv");
   fileName = fileName.arg(champName);
   if (PARITY == type)
     fileName = fileName.arg("draw");
@@ -398,7 +398,7 @@ NextTur CStorage::ReadNextTur(QString champName)
 
 int CStorage::Report(QString champName, QString teamName)
 {
-  QString fileName("../kpso/rates/%1/draw.csv");
+  QString fileName("../kpso/football/rates/%1/draw.csv");
   fileName = fileName.arg(champName);
 
   QFile file(fileName);
@@ -423,7 +423,7 @@ int CStorage::Report(QString champName, QString teamName)
 
 void CStorage::Reported(QString champName, QString teamName, int value)
 {
-  QString fileName("../kpso/rates/%1/draw.csv");
+  QString fileName("../kpso/football/rates/%1/draw.csv");
   fileName = fileName.arg(champName);
 
   QFile file(fileName);
@@ -485,7 +485,7 @@ QMap<QString, NextTur> CStorage::ReadNext()
 
 void CStorage::CreatePlays(QString champName, NextTur tur)
 {
-  QString fileName("../kpso/rates/%1/temp.csv");
+  QString fileName("../kpso/football/rates/%1/temp.csv");
   fileName = fileName.arg(champName);
 
   QFile file(fileName);
@@ -502,7 +502,7 @@ void CStorage::CreatePlays(QString champName, NextTur tur)
 NextTur CStorage::ReadPlays(QString champName)
 {
   NextTur tur;
-  QString fileName("../kpso/rates/%1/temp.csv");
+  QString fileName("../kpso/football/rates/%1/temp.csv");
   fileName = fileName.arg(champName);
 
   QFile file(fileName);
