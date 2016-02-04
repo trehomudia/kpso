@@ -1,6 +1,6 @@
-#include "footbol_manager.h"
+#include "hockey_manager.h"
 #include "storage.h"
-#include "ui_footbol_manager.h"
+#include "ui_hockey_manager.h"
 #include "table_view.h"
 #include <QStandardItemModel>
 
@@ -189,6 +189,8 @@ void CFootbolManager::FormDataTeams()
   foreach(QString champName, m_pData->championats.keys())
     for(int i = 0; i < m_pData->championats[champName].count(); ++i)
       m_pData->championats[champName][i].FormDataCommon();
+
+
 
   QVector<int> no_paritysCommon;
   foreach(QString str, m_pData->championats.keys())

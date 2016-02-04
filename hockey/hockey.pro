@@ -13,16 +13,16 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        footbol_manager.cpp\
+        hockey_manager.cpp\
         storage.cpp\
         table_view.cpp\
         team.cpp
 
 
-HEADERS  += footbol_manager.h\
+HEADERS  += hockey_manager.h\
             table_view.h\
             storage.h\
             team.h
 
-FORMS    += footbol_manager.ui\
+FORMS    += hockey_manager.ui\
             championat_widget.ui
