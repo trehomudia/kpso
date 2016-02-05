@@ -1,4 +1,4 @@
-#include "footbol_manager.h"
+#include "football_manager.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])

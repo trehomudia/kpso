@@ -1,6 +1,6 @@
-#include "footbol_manager.h"
+#include "football_manager.h"
 #include "storage.h"
-#include "ui_footbol_manager.h"
+#include "ui_football_manager.h"
 #include "table_view.h"
 #include <QStandardItemModel>
 
@@ -99,7 +99,8 @@ void CFootbolManager::AddValues(const QString& tableName)
   {
     foreach(CTeam team, m_pData->championats[tableName])
     {
-      Season s = team.GetSeasons().last();
+//      Season s = team.GetSeasons().last();
+      Season s = team.GetSeasons().value(team.GetSeasons().keys().last());
       if (tur[i].first == team.GetName() && tur[i].second == s.last().opponent)
       {
         count++;
@@ -114,7 +115,8 @@ void CFootbolManager::AddValues(const QString& tableName)
   {
     foreach(CTeam team, m_pData->championats[tableName])
     {
-      Season s = team.GetSeasons().last();
+//      Season s = team.GetSeasons().last();
+      Season s = team.GetSeasons().value(team.GetSeasons().keys().last());
       if (tur[i].first == team.GetName() && tur[i].second == s.last().opponent && team.Concurents().contains(tur[i].second))
       {
         if(s.last().point == 1)
@@ -219,13 +221,13 @@ void CFootbolManager::FormDataTeams()
     map1[v]++;
   }
 
-  int cash = 0;
-  int koef = 3;
-  for(int i = 1; i < map1.lastKey(); ++i)
-  {
-    if(!map1.contains(i))
-      map1.insert(i, 0);
-  }
+//  int cash = 0;
+//  int koef = 3;
+//  for(int i = 1; i < map1.lastKey(); ++i)
+//  {
+//    if(!map1.contains(i))
+//      map1.insert(i, 0);
+//  }
 
 //  foreach(int count, map1.keys())
 //  {
