@@ -295,7 +295,7 @@ void CFootbolManager::ShowSource()
     CWidget* table = AddTable(champName);
     CStandardItemModel* modelCommon = table->TableCommon();
     modelCommon->SetColumns(GetSortNextNames(champName));
-    modelCommon->setVerticalHeaderLabels(QStringList() << tr("Ничьи"));
+    modelCommon->setVerticalHeaderLabels(QStringList() << QObject::trUtf8("Ничьи"));
     foreach(CTeam team, m_pData->championats.value(champName))
     {
       //table->PrintCommonResult(team, NO_PARITY);
@@ -304,7 +304,7 @@ void CFootbolManager::ShowSource()
     }
 
     CStandardItemModel* modelResult = table->TableResult();
-    modelResult->SetColumns(QVector<QString>() << QString("Команда1") << QString("Команда2") << QString("Ничья")/* << QString("ХНичья")*/);
+    modelResult->SetColumns(QVector<QString>() << QObject::trUtf8("Команда1") << QObject::trUtf8("Команда2") << QObject::trUtf8("Ничья")/* << QString("ХНичья")*/);
     for(int i = 0; i < m_pData->nextTurs.value(champName).count(); ++i)
     {
       QColor color;

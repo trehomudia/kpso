@@ -356,7 +356,10 @@ QStringList CStorage::GetChampNames()
 bool CStorage::RateIsEmpty(QString champName)
 {
   QDir dir(QDir::current());
-  dir.cd(QString("../kpso/football"));
+  dir.cd(QString("../"));
+
+  while(!dir.cd(QString("football")))
+    dir.mkdir(QString("football"));
 
   while(!dir.cd(QString("rates")))
     dir.mkdir(QString("rates"));
@@ -364,7 +367,7 @@ bool CStorage::RateIsEmpty(QString champName)
   while(!dir.cd(champName))
     dir.mkdir(champName);
 
-  QString fileName("../kpso/football/rates/%1/draw.csv");
+  QString fileName("../football/rates/%1/draw.csv");
   fileName = fileName.arg(champName);
   QFile file(fileName);
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -446,7 +449,7 @@ Season CStorage::ReadFile(QString fileName)
 
 void CStorage::AddTeam(CTeam team, QString champName, int type)
 {
-  QString fileName("../kpso/football/rates/%1/%2.csv");
+  QString fileName("../football/rates/%1/%2.csv");
   fileName = fileName.arg(champName);
   if (PARITY == type)
     fileName = fileName.arg("draw");
@@ -463,7 +466,7 @@ void CStorage::AddTeam(CTeam team, QString champName, int type)
 
 int CStorage::ReadCurrentRate(QString teamName, QString champName, int type)
 {
-  QString fileName("../kpso/football/rates/%1/%2.csv");
+  QString fileName("../football/rates/%1/%2.csv");
   fileName = fileName.arg(champName);
   if (PARITY == type)
     fileName = fileName.arg("draw");
@@ -490,7 +493,7 @@ int CStorage::ReadCurrentRate(QString teamName, QString champName, int type)
 
 void CStorage::ExchangeName(QString teamName, QString champName, int type, QString targetName)
 {
-  QString fileName("../kpso/football/rates/%1/%2.csv");
+  QString fileName("../football/rates/%1/%2.csv");
   fileName = fileName.arg(champName);
   if (PARITY == type)
     fileName = fileName.arg("draw");
@@ -525,7 +528,7 @@ void CStorage::ExchangeName(QString teamName, QString champName, int type, QStri
 
 void CStorage::ExchangeRate(QString teamName, QString champName, int type, int targetValue)
 {
-  QString fileName("../kpso/football/rates/%1/%2.csv");
+  QString fileName("../football/rates/%1/%2.csv");
   fileName = fileName.arg(champName);
   if (PARITY == type)
     fileName = fileName.arg("draw");
@@ -588,7 +591,7 @@ NextTur CStorage::ReadNextTur(QString champName)
 
 int CStorage::Report(QString champName, QString teamName)
 {
-  QString fileName("../kpso/football/rates/%1/draw.csv");
+  QString fileName("../football/rates/%1/draw.csv");
   fileName = fileName.arg(champName);
 
   QFile file(fileName);
@@ -613,7 +616,7 @@ int CStorage::Report(QString champName, QString teamName)
 
 void CStorage::Reported(QString champName, QString teamName, int value)
 {
-  QString fileName("../kpso/football/rates/%1/draw.csv");
+  QString fileName("../football/rates/%1/draw.csv");
   fileName = fileName.arg(champName);
 
   QFile file(fileName);
@@ -675,7 +678,7 @@ QMap<QString, NextTur> CStorage::ReadNext()
 
 void CStorage::CreatePlays(QString champName, NextTur tur)
 {
-  QString fileName("../kpso/football/rates/%1/temp.csv");
+  QString fileName("../football/rates/%1/temp.csv");
   fileName = fileName.arg(champName);
 
   QFile file(fileName);
@@ -692,7 +695,7 @@ void CStorage::CreatePlays(QString champName, NextTur tur)
 NextTur CStorage::ReadPlays(QString champName)
 {
   NextTur tur;
-  QString fileName("../kpso/football/rates/%1/temp.csv");
+  QString fileName("../football/rates/%1/temp.csv");
   fileName = fileName.arg(champName);
 
   QFile file(fileName);
