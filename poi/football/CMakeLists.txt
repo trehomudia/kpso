@@ -33,8 +33,8 @@ set(SOURCES
 )
 
 set(UI_SOURCES
-	form/football_manager.ui
 	form/championat_widget.ui
+	form/football_manager.ui
 )
 
 include_directories(
