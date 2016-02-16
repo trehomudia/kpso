@@ -35,7 +35,7 @@ struct CMatch
   int difference;
 };
 
-typedef QVector<CMatch> Season;
+//typedef QVector<CMatch> Season;
 
 class CTeam
 {
@@ -60,7 +60,7 @@ public:
   QVector<QString> Concurents() {return m_concurents;}
   void ExchengeConcurents(QString concurent, QString distConcurent);
 
-  QMap<int, Season>& GetSeasons() {return m_seasons;}
+  QVector<CMatch>& GetMatches() {return m_matches;}
   int CashParityPosition() {return cashParityPosition;}
 
 private:
@@ -70,10 +70,47 @@ private:
   int differince;
   QVector<int> noParityesCommon;
   QVector<QString> m_concurents;
-  QMap<int, Season> m_seasons;
+  QVector<CMatch> m_matches;
+//  Season m_season;
 };
 
-Season SelectTeamData(const QMap<int, Season>& data);
+//class CTeam
+//{
+//public:
+//  CTeam(const QString& name);
+//  CTeam();
+//  ~CTeam();
+
+//  void SetName(const QString& name);
+//  QString GetName();
+//  void FormData();
+//  void FormDataCommon();
+
+//  void FindCurrentCashParity();
+//  void SetCurrentCashParity(int numCash);
+
+//  QVector<int> NoParityesCommon() {return noParityesCommon;}
+//  int PointsCommon() {return pointsCommon;}
+//  int Differince() {return differince;}
+
+//  void SetConcurents(QVector<QString> concurents) {m_concurents = concurents;}
+//  QVector<QString> Concurents() {return m_concurents;}
+//  void ExchengeConcurents(QString concurent, QString distConcurent);
+
+//  QMap<int, Season>& GetSeasons() {return m_seasons;}
+//  int CashParityPosition() {return cashParityPosition;}
+
+//private:
+//  QString m_name;
+//  int cashParityPosition;
+//  int pointsCommon;
+//  int differince;
+//  QVector<int> noParityesCommon;
+//  QVector<QString> m_concurents;
+//  QMap<int, Season> m_seasons;
+//};
+
+//Season SelectTeamData(const QMap<int, Season>& data);
 
 class CStandardItemModel : public QStandardItemModel
 {

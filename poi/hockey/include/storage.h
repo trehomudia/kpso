@@ -19,11 +19,16 @@ public:
   ~CStorage();
   QStringList GetFileNames(const QString& champName, int confidentialSeasons = 0);
   QStringList GetChampNames();
-  void FormTeams(Season season, const QString& champName, QMap<QString, Championat>& championats);
+  void FormTeams(QVector<CMatch> matches, const QString& champName, QMap<QString, Championat>& championats);
   QMap<QString, Championat> ReadFiles(int confidentialSeasons);
-  QStringList GetTeamNames(const QString& champName, const QMap<QString, Championat>& championats);
+
+
+
+
+
+
   bool RateIsEmpty(QString champName);
-  Season ReadFile(QString fileName);
+  QVector<CMatch> ReadFile(QString fileName);
   void AddTeam(CTeam team, QString champName, int type);
   int ReadCurrentRate(QString teamName, QString champName, int type);
   void ExchangeName(QString teamName, QString champName, int type, QString targetName);

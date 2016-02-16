@@ -7,13 +7,13 @@
 class QSplitter;
 class QStandardItemModel;
 
-class CFootbolManager : public QMainWindow
+class CHockeyManager : public QMainWindow
 {
   Q_OBJECT
 
 public:
-  explicit CFootbolManager(QWidget *parent = 0);
-  ~CFootbolManager();
+  explicit CHockeyManager(QWidget *parent = 0);
+  ~CHockeyManager();
   void Do();
 
 public slots:

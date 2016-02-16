@@ -8,39 +8,27 @@ CStorage::CStorage(QObject *parent) : QObject(parent){}
 
 CStorage::~CStorage(){}
 
-QStringList CStorage::GetTeamNames(const QString& champName, const QMap<QString, Championat>& championats)
+void CStorage::FormTeams(QVector<CMatch> matches, const QString& champName, QMap<QString, Championat>& championats)
 {
-  QSet<QString> teams;
-  foreach(CTeam team, championats[champName])
-    teams << team.GetName();
-
-  return teams.toList();
-}
-
-void CStorage::FormTeams(Season season, const QString& champName, QMap<QString, Championat>& championats)
-{
-  foreach(CMatch match, season)
+  foreach(CMatch match, matches)
   {
-    if (!GetTeamNames(champName, championats).contains(match.name))
+    QSet<QString> t;
+    foreach(CTeam team, championats[champName])
+      t << team.GetName();
+
+    QVector<QString> teams = t.toList().toVector();
+
+    if (!teams.contains(match.name))
     {
       CTeam team(match.name);
       championats[champName] << team;
     }
   }
 
-  foreach(CMatch match, season)
-  {
+  foreach(CMatch match, matches)
     for(int i = 0; i < championats[champName].count(); ++i)
-    {
       if (championats[champName][i].GetName() == match.name)
-      {
-        if (!championats[champName][i].GetSeasons().contains(match.season))
-          championats[champName][i].GetSeasons().insert(match.season, Season());
-
-        championats[champName][i].GetSeasons()[match.season] << match;
-      }
-    }
-  }
+        championats[champName][i].GetMatches() << match;
 }
 
 QMap<QString, Championat> CStorage::ReadFiles(int confidentialSeasons)
@@ -61,23 +49,23 @@ QStringList CStorage::GetFileNames(const QString& champName, int confidentialSea
   QStringList list;
   if (champName == "khl")
   {
-    list << "../kpso/hockey/data/khl/14.csv";
-    list << "../kpso/hockey/data/khl/15.csv";
+    list << "../../skotina/poi/hockey/resource/data/khl/14.csv";
+    list << "../../skotina/poi/hockey/resource/data/khl/15.csv";
   }
   else if(champName == "mhl")
   {
-    list << "../kpso/hockey/data/mhl/14.csv";
-    list << "../kpso/hockey/data/mhl/15.csv";
+    list << "../../skotina/poi/hockey/resource/data/mhl/14.csv";
+    list << "../../skotina/poi/hockey/resource/data/mhl/15.csv";
   }
   else if(champName == "nhl")
   {
-    list << "../kpso/hockey/data/nhl/14.csv";
-    list << "../kpso/hockey/data/nhl/15.csv";
+    list << "../../skotina/poi/hockey/resource/data/nhl/14.csv";
+    list << "../../skotina/poi/hockey/resource/data/nhl/15.csv";
   }
   else if(champName == "vhl")
   {
-    list << "../kpso/hockey/data/vhl/14.csv";
-    list << "../kpso/hockey/data/vhl/15.csv";
+    list << "../../skotina/poi/hockey/resource/data/vhl/14.csv";
+    list << "../../skotina/poi/hockey/resource/data/vhl/15.csv";
   }
 
   if (0 == confidentialSeasons)
@@ -134,25 +122,26 @@ bool CStorage::RateIsEmpty(QString champName)
     return false;
 }
 
-Season CStorage::ReadFile(QString fileName)
+QVector<CMatch> CStorage::ReadFile(QString fileName)
 {
   QFile file(fileName);
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    return Season();
+    return QVector<CMatch>();
 
   fileName.remove(".csv");
   fileName.remove(QString("!"));
   int seasonNum = fileName.remove(0, fileName.size() - 2).toInt();
 
   QTextStream in(&file);
-  Season season;
+  QVector<CMatch> season;
   while (!in.atEnd())
   {
     QString str = in.readLine();
     str.remove(" ");
     QVector<QString> line = str.split(",").toVector();
     line.remove(1);
-    line.remove(5);
+    while(line.count() > 5)
+      line.remove(5);
     line[0].remove("\"");
     QVector<QString> date = line[0].split(".").toVector();
 

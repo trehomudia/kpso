@@ -6,6 +6,7 @@ CTeam::CTeam(const QString& name)
   : m_name(name)
   , cashParityPosition(0)
   , pointsCommon(0)
+  , differince(0)
 {}
 
 CTeam::CTeam()
@@ -41,7 +42,7 @@ void CTeam::FormData()
 {
   pointsCommon = 0;
   differince = 0;
-  foreach(CMatch match, SelectTeamData(GetSeasons()))
+  foreach(CMatch match, GetMatches())
   {
     pointsCommon += match.point;
     differince += match.difference;
@@ -50,21 +51,21 @@ void CTeam::FormData()
 
 void CTeam::FindCurrentCashParity()
 {
-  QVector<CMatch> matchs;
-  foreach(int season, m_seasons.keys())
-    foreach(CMatch match, m_seasons.value(season))
-      matchs << match;
+//  QVector<CMatch> matchs;
+//  foreach(int season, m_seasons.keys())
+//    foreach(CMatch match, m_seasons.value(season))
+//      matchs << match;
 
-  for(int i = matchs.count() - 1; i >= 0; --i)
-  {
-    if (m_concurents.contains(matchs[i].opponent))
-    {
-      if(matchs.value(i).point != PARITY)
-        cashParityPosition++;
-      else
-        i = 0;
-    }
-  }
+//  for(int i = matchs.count() - 1; i >= 0; --i)
+//  {
+//    if (m_concurents.contains(matchs[i].opponent))
+//    {
+//      if(matchs.value(i).point != PARITY)
+//        cashParityPosition++;
+//      else
+//        i = 0;
+//    }
+//  }
 }
 
 void CTeam::SetCurrentCashParity(int numCash)
@@ -74,32 +75,32 @@ void CTeam::SetCurrentCashParity(int numCash)
 
 void CTeam::FormDataCommon()
 {
-  int noParity = 0;
-  foreach(CMatch match, SelectTeamData(GetSeasons()))
-  {
-    if (m_concurents.contains(match.opponent))
-    {
-      if(match.point != 1)
-      {
-        noParity++;
-      }
-      else
-      {
-        noParityesCommon << noParity;
-        noParity = 0;
-      }
-    }
-  }
+//  int noParity = 0;
+//  foreach(CMatch match, SelectTeamData(GetSeasons()))
+//  {
+//    if (m_concurents.contains(match.opponent))
+//    {
+//      if(match.point != 1)
+//      {
+//        noParity++;
+//      }
+//      else
+//      {
+//        noParityesCommon << noParity;
+//        noParity = 0;
+//      }
+//    }
+//  }
 }
 
-Season SelectTeamData(const QMap<int, Season>& data)
-{
-  QVector<CMatch> plays;
-  foreach(int num, data.keys())
-    foreach(CMatch match, data.value(num))
-      plays << match;
-  return plays;
-}
+//Season SelectTeamData(const QMap<int, Season>& data)
+//{
+//  QVector<CMatch> plays;
+//  foreach(int num, data.keys())
+//    foreach(CMatch match, data.value(num))
+//      plays << match;
+//  return plays;
+//}
 
 CStandardItemModel::CStandardItemModel(QObject * parent)
   : Base(parent) {}
