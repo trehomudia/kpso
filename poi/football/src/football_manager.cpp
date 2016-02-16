@@ -14,6 +14,7 @@ public:
   PrivateData(){}
   ~PrivateData(){}
 
+  QMap<QString, Championat> bigData;
   QMap<QString, Championat> championats;
   QMap<QString, NextTur> nextTurs;
   Ui::statistica ui;
@@ -34,8 +35,20 @@ CFootbolManager::~CFootbolManager()
 
 void CFootbolManager::Do()
 {
+  m_pData->bigData = m_pData->storage.ReadFiles();
   m_pData->championats = m_pData->storage.ReadFiles(confidentialSeasons);
   m_pData->nextTurs = m_pData->storage.ReadNext();
+
+//  foreach(QString champName, m_pData->championats.keys())
+//  {
+//    QVector<QString> names;
+//    fore
+//  }
+
+  foreach(QString champName, m_pData->championats.keys())
+    for(int i = 0; i < m_pData->championats.value(champName).count(); ++i)
+      m_pData->championats[champName][i].CropMatches(30);
+
   FormDataTeams();
   FormRates();
   ShowSource();
@@ -93,46 +106,45 @@ void CFootbolManager::FormRates()
 
 void CFootbolManager::AddValues(const QString& tableName)
 {
-  NextTur tur = m_pData->storage.ReadPlays(tableName);
-  int count = 0;
-  for (int i = 0; i < tur.count(); ++i)
-  {
-    foreach(CTeam team, m_pData->championats[tableName])
-    {
-//      Season s = team.GetSeasons().last();
-      Season s = team.GetSeasons().value(team.GetSeasons().keys().last());
-      if (tur[i].first == team.GetName() && tur[i].second == s.last().opponent)
-      {
-        count++;
-      }
-    }
-  }
+//  NextTur tur = m_pData->storage.ReadPlays(tableName);
+//  int count = 0;
+//  for (int i = 0; i < tur.count(); ++i)
+//  {
+//    foreach(CTeam team, m_pData->championats[tableName])
+//    {
+//      Season s = team.GetSeasons().value(team.GetSeasons().keys().last());
+//      if (tur[i].first == team.GetName() && tur[i].second == s.last().opponent)
+//      {
+//        count++;
+//      }
+//    }
+//  }
 
-  if (count != tur.count())
-    return;
+//  if (count != tur.count())
+//    return;
 
-  for (int i = 0; i < tur.count(); ++i)
-  {
-    foreach(CTeam team, m_pData->championats[tableName])
-    {
-//      Season s = team.GetSeasons().last();
-      Season s = team.GetSeasons().value(team.GetSeasons().keys().last());
-      if (tur[i].first == team.GetName() && tur[i].second == s.last().opponent && team.Concurents().contains(tur[i].second))
-      {
-        if(s.last().point == 1)
-        {
-          m_pData->storage.ExchangeRate(tur[i].first, tableName, PARITY, 0);
-          m_pData->storage.ExchangeRate(tur[i].second, tableName, PARITY, 0);
-        }
-        else
-        {
-          m_pData->storage.ExchangeRate(tur[i].first, tableName, PARITY, m_pData->storage.ReadCurrentRate(tur[i].first, tableName, PARITY) + 1);
-          m_pData->storage.ExchangeRate(tur[i].second, tableName, PARITY, m_pData->storage.ReadCurrentRate(tur[i].second, tableName, PARITY) + 1);
-        }
-      }
-    }
-  }
-  int g = 9;
+//  for (int i = 0; i < tur.count(); ++i)
+//  {
+//    foreach(CTeam team, m_pData->championats[tableName])
+//    {
+////      Season s = team.GetSeasons().last();
+//      Season s = team.GetSeasons().value(team.GetSeasons().keys().last());
+//      if (tur[i].first == team.GetName() && tur[i].second == s.last().opponent && team.Concurents().contains(tur[i].second))
+//      {
+//        if(s.last().point == 1)
+//        {
+//          m_pData->storage.ExchangeRate(tur[i].first, tableName, PARITY, 0);
+//          m_pData->storage.ExchangeRate(tur[i].second, tableName, PARITY, 0);
+//        }
+//        else
+//        {
+//          m_pData->storage.ExchangeRate(tur[i].first, tableName, PARITY, m_pData->storage.ReadCurrentRate(tur[i].first, tableName, PARITY) + 1);
+//          m_pData->storage.ExchangeRate(tur[i].second, tableName, PARITY, m_pData->storage.ReadCurrentRate(tur[i].second, tableName, PARITY) + 1);
+//        }
+//      }
+//    }
+//  }
+//  int g = 9;
 }
 
 void CFootbolManager::AnalizeCommonPosition()

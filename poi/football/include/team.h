@@ -58,8 +58,10 @@ public:
   QVector<QString> Concurents() {return m_concurents;}
   void ExchengeConcurents(QString concurent, QString distConcurent);
 
-  QMap<int, Season>& GetSeasons() {return m_seasons;}
+  QVector<CMatch>& GetSeasons() {return m_seasons;}
   int CashParityPosition() {return cashParityPosition;}
+
+  void CropMatches(int num);
 
 private:
   QString m_name;
@@ -68,7 +70,8 @@ private:
   int differince;
   QVector<int> noParityesCommon;
   QVector<QString> m_concurents;
-  QMap<int, Season> m_seasons;
+  QVector<CMatch> m_seasons;
+//  QMap<int, Season> m_seasons;
 };
 
 Season SelectTeamData(const QMap<int, Season>& data);

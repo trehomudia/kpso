@@ -41,19 +41,25 @@ void CTeam::FormData()
 {
   pointsCommon = 0;
   differince = 0;
-  foreach(CMatch match, SelectTeamData(GetSeasons()))
+  foreach(CMatch match, GetSeasons())
   {
     pointsCommon += match.point;
     differince += match.difference;
   }
+//  pointsCommon = 0;
+//  differince = 0;
+//  foreach(CMatch match, SelectTeamData(GetSeasons()))
+//  {
+//    pointsCommon += match.point;
+//    differince += match.difference;
+//  }
 }
 
 void CTeam::FindCurrentCashParity()
 {
   QVector<CMatch> matchs;
-  foreach(int season, m_seasons.keys())
-    foreach(CMatch match, m_seasons.value(season))
-      matchs << match;
+  foreach(CMatch match, m_seasons)
+    matchs << match;
 
   for(int i = matchs.count() - 1; i >= 0; --i)
   {
@@ -65,6 +71,22 @@ void CTeam::FindCurrentCashParity()
         i = 0;
     }
   }
+
+//  QVector<CMatch> matchs;
+//  foreach(int season, m_seasons.keys())
+//    foreach(CMatch match, m_seasons.value(season))
+//      matchs << match;
+
+//  for(int i = matchs.count() - 1; i >= 0; --i)
+//  {
+//    if (m_concurents.contains(matchs[i].opponent))
+//    {
+//      if(matchs.value(i).point != PARITY)
+//        cashParityPosition++;
+//      else
+//        i = 0;
+//    }
+//  }
 }
 
 void CTeam::SetCurrentCashParity(int numCash)
@@ -72,10 +94,16 @@ void CTeam::SetCurrentCashParity(int numCash)
   cashParityPosition = numCash;
 }
 
+void CTeam::CropMatches(int num)
+{
+  if (m_seasons.count() >= num)
+    m_seasons.remove(num, m_seasons.count() - num);
+}
+
 void CTeam::FormDataCommon()
 {
   int noParity = 0;
-  foreach(CMatch match, SelectTeamData(GetSeasons()))
+  foreach(CMatch match, GetSeasons())
   {
     if (m_concurents.contains(match.opponent))
     {
@@ -90,6 +118,23 @@ void CTeam::FormDataCommon()
       }
     }
   }
+
+//  int noParity = 0;
+//  foreach(CMatch match, SelectTeamData(GetSeasons()))
+//  {
+//    if (m_concurents.contains(match.opponent))
+//    {
+//      if(match.point != 1)
+//      {
+//        noParity++;
+//      }
+//      else
+//      {
+//        noParityesCommon << noParity;
+//        noParity = 0;
+//      }
+//    }
+//  }
 }
 
 Season SelectTeamData(const QMap<int, Season>& data)

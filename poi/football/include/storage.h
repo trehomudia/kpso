@@ -19,16 +19,23 @@ public:
   ~CStorage();
   QStringList GetFileNames(const QString& champName, int confidentialSeasons = 0);
   QStringList GetChampNames();
-  void FormTeams(Season season, const QString& champName, QMap<QString, Championat>& championats);
-  QMap<QString, Championat> ReadFiles(int confidentialSeasons);
-  QStringList GetTeamNames(const QString& champName, const QMap<QString, Championat>& championats);
+  void FormTeams(QVector<CMatch> season, const QString& champName, QMap<QString, Championat>& championats);
+  QMap<QString, Championat> ReadFiles(int confidentialSeasons = 0);
+  QMap<QString, NextTur> ReadNext();
+  NextTur ReadNextTur(QString champName);
+
+
+
+
+
+
+  QVector<QString> GetTeamNames(const QString& champName, const QMap<QString, Championat>& championats);
   bool RateIsEmpty(QString champName);
   Season ReadFile(QString fileName);
   void AddTeam(CTeam team, QString champName, int type);
   int ReadCurrentRate(QString teamName, QString champName, int type);
   void ExchangeName(QString teamName, QString champName, int type, QString targetName);
   void ExchangeRate(QString teamName, QString champName, int type, int targetValue);
-  QMap<QString, NextTur> ReadNext();
   int Report(QString champName, QString teamName);
   void Reported(QString champName, QString teamName, int value);
 
@@ -39,7 +46,7 @@ signals:
   void AllChecked(bool);
 
 private:
-  NextTur ReadNextTur(QString champName);
+
   bool NextContainStr(NextTur nextTur, const QString& str);
 };
 
