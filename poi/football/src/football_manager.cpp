@@ -39,11 +39,63 @@ void CFootbolManager::Do()
   m_pData->championats = m_pData->storage.ReadFiles(confidentialSeasons);
   m_pData->nextTurs = m_pData->storage.ReadNext();
 
-//  foreach(QString champName, m_pData->championats.keys())
-//  {
-//    QVector<QString> names;
-//    fore
-//  }
+  foreach(QString champName, m_pData->championats.keys())
+  {
+    QVector<QString> namesNext;
+    for(int i = 0; i < m_pData->nextTurs[champName].count(); ++i)
+    {
+      namesNext << m_pData->nextTurs[champName][i].first;
+      namesNext << m_pData->nextTurs[champName][i].second;
+    }
+
+    QSet<QString> setPrev;
+    foreach(CTeam team, m_pData->championats[champName])
+      if (!namesNext.contains(team.GetName()))
+        setPrev << team.GetName();
+
+    QMap<QString, Championat> championats;
+    championats.insert(champName, Championat());
+    m_pData->storage.FormTeams(m_pData->storage.ReadFile(m_pData->storage.GetFileNames(champName, 2).first()), champName, championats);
+    Championat championat(championats.value(championats.keys().first()));
+
+    QSet<QString> namesPrev;
+    foreach(CTeam team, championat)
+      namesPrev << team.GetName();
+
+    QSet<QString> setNext;
+    foreach(QString name, namesNext)
+      if (!namesPrev.contains(name))
+        setNext << name;
+
+    if (setNext.count() != setPrev.count())
+      return;//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Впилить лог  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+
+    QVector< QPair< QString, QString> > pair;
+    for(int i = 0; i < setPrev.count(); ++i)
+      pair << QPair<QString, QString>(setPrev.toList()[i], setNext.toList()[i]);
+///Найдено соответствие
+
+    for(int pairCount = 0; pairCount < pair.count(); ++pairCount)
+    {
+      for (int i = 0; i < m_pData->championats[champName].count(); ++i)
+      {
+        if (m_pData->championats[champName][i].GetName() == pair[pairCount].first)
+          m_pData->championats[champName][i].Rename(pair[pairCount].second);
+
+        for (int j = 0; j < m_pData->championats[champName].count(); ++j)
+        {
+          if (m_pData->championats[champName][i].GetName() == m_pData->championats[champName][j].GetName() && m_pData->championats[champName][i].GetSeasons().count() != m_pData->championats[champName][j].GetSeasons().count())
+          {
+            m_pData->championats[champName][i].GetSeasons() << m_pData->championats[champName][j].GetSeasons();
+            m_pData->championats[champName].remove(j);
+            --j;
+          }
+        }
+      }
+    }
+
+    int k = 8;
+  }
 
   foreach(QString champName, m_pData->championats.keys())
     for(int i = 0; i < m_pData->championats.value(champName).count(); ++i)

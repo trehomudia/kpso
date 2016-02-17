@@ -100,6 +100,18 @@ void CTeam::CropMatches(int num)
     m_seasons.remove(num, m_seasons.count() - num);
 }
 
+void CTeam::Rename(const QString &newName)
+{
+  for(int i = 0; i < m_seasons.count(); ++i)
+  {
+    if (m_seasons[i].name == newName)
+      m_seasons[i].name = newName;
+    if (m_seasons[i].opponent == newName)
+      m_seasons[i].opponent = newName;
+  }
+  m_name = newName;
+}
+
 void CTeam::FormDataCommon()
 {
   int noParity = 0;

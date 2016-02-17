@@ -63,6 +63,8 @@ public:
 
   void CropMatches(int num);
 
+  void Rename(const QString& newName);
+
 private:
   QString m_name;
   int cashParityPosition;

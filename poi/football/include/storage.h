@@ -23,15 +23,17 @@ public:
   QMap<QString, Championat> ReadFiles(int confidentialSeasons = 0);
   QMap<QString, NextTur> ReadNext();
   NextTur ReadNextTur(QString champName);
-
-
-
-
-
-
   QVector<QString> GetTeamNames(const QString& champName, const QMap<QString, Championat>& championats);
-  bool RateIsEmpty(QString champName);
   Season ReadFile(QString fileName);
+
+
+
+
+
+
+
+
+  bool RateIsEmpty(QString champName);
   void AddTeam(CTeam team, QString champName, int type);
   int ReadCurrentRate(QString teamName, QString champName, int type);
   void ExchangeName(QString teamName, QString champName, int type, QString targetName);
