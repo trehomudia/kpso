@@ -15,6 +15,7 @@ set(HEADERS
 	include/storage.h
 	include/table_view.h
 	include/team.h
+	include/declaration.h
 )
 
 set(MOC_HEADERS

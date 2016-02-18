@@ -4,11 +4,11 @@
 #include "team.h"
 #include <QObject>
 
-typedef QVector<CTeam> Championat;
-typedef QVector<QPair<QString, QString> > NextTur;
-
 const int REPORT = 1001;
 const int NOTREPORT = 1000;
+
+typedef QVector<CTeam> Championat;
+typedef QVector<QPair<QString, QString> > NextTur;
 
 class CStorage : public QObject
 {

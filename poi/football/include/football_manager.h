@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include "team.h"
+#include "declaration.h"
+#include "storage.h"
 
 class QSplitter;
 class QStandardItemModel;
@@ -24,9 +26,12 @@ private:
   class PrivateData;
   PrivateData* m_pData;
 
-  void FormDataTeams();
+  void ReplaceData();
+  void FormDataTeams(QMap<QString, Championat>& championat);
   void FormRates();
-  void AnalizeCommonPosition();
+  void AnalizeCommonPosition(QMap<QString, Championat>& championat);
+  void FormDeltaConcurents();
+
   void ShowSource();
   void AddValues(const QString& tableName);
   CWidget* AddTable(const QString& tableName);

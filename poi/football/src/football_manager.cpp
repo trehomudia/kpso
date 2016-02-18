@@ -3,8 +3,8 @@
 #include "ui_football_manager.h"
 #include "table_view.h"
 #include <QStandardItemModel>
+#include <QDebug>
 
-const int deltaConcurent = 3;
 const int confidentialSeasons = 2;
 const int parityColumn = 0;
 
@@ -17,6 +17,7 @@ public:
   QMap<QString, Championat> bigData;
   QMap<QString, Championat> championats;
   QMap<QString, NextTur> nextTurs;
+  QMap<QString, int> deltaConcurents;
   Ui::statistica ui;
   CStorage storage;
 };
@@ -33,12 +34,12 @@ CFootbolManager::~CFootbolManager()
   delete m_pData;
 }
 
-void CFootbolManager::Do()
+void CFootbolManager::ReplaceData()
 {
-  m_pData->bigData = m_pData->storage.ReadFiles();
-  m_pData->championats = m_pData->storage.ReadFiles(confidentialSeasons);
-  m_pData->nextTurs = m_pData->storage.ReadNext();
-
+  //первичная обработка данных
+  //заменая имен выбывших команд на вошедшие, перемещение результатов их игр в результаты новых
+  //таким образом при малых количествах игр вошедших коменд им добавятся очки выбывших
+  //ограничение количества игр количеством игр в одном сезоне
   foreach(QString champName, m_pData->championats.keys())
   {
     QVector<QString> namesNext;
@@ -94,14 +95,28 @@ void CFootbolManager::Do()
       }
     }
 
-    int k = 8;
-  }
-
-  foreach(QString champName, m_pData->championats.keys())
     for(int i = 0; i < m_pData->championats.value(champName).count(); ++i)
-      m_pData->championats[champName][i].CropMatches(30);
+      m_pData->championats[champName][i].CropMatches(2 * (championat.count() - 1));
+  }
+}
 
-  FormDataTeams();
+void CFootbolManager::FormDeltaConcurents()
+{
+  m_pData->deltaConcurents.clear();
+  foreach(QString name, m_pData->nextTurs.keys())
+    m_pData->deltaConcurents.insert(name, m_pData->nextTurs.value(name).count() / 2 - 1);
+}
+
+void CFootbolManager::Do()
+{
+  m_pData->bigData = m_pData->storage.ReadFiles();
+  m_pData->championats = m_pData->storage.ReadFiles(confidentialSeasons);
+  m_pData->nextTurs = m_pData->storage.ReadNext();
+  FormDeltaConcurents();
+  ReplaceData();
+  FormDataTeams(m_pData->championats);
+  FormDataTeams(m_pData->bigData);
+
   FormRates();
   ShowSource();
 }
@@ -199,91 +214,104 @@ void CFootbolManager::AddValues(const QString& tableName)
 //  int g = 9;
 }
 
-void CFootbolManager::AnalizeCommonPosition()
+void CFootbolManager::AnalizeCommonPosition(QMap<QString, Championat>& championat)
 {
   //сортировка команд по очкам
-  foreach(QString champName, m_pData->championats.keys())
+  foreach(QString champName, championat.keys())
   {
-    for(int i = 0; i < m_pData->championats[champName].count(); ++i)
+    for(int i = 0; i < championat[champName].count(); ++i)
     {
-      for(int j = i; j < m_pData->championats[champName].count(); j++)
+      for(int j = i; j < championat[champName].count(); j++)
       {
-        if (m_pData->championats[champName][j].PointsCommon() > m_pData->championats[champName][i].PointsCommon())
+        if (championat[champName][j].PointsCommon() > championat[champName][i].PointsCommon())
         {
-          CTeam team = m_pData->championats[champName][j];
-          m_pData->championats[champName][j] = m_pData->championats[champName][i];
-          m_pData->championats[champName][i] = team;
+          CTeam team = championat[champName][j];
+          championat[champName][j] = championat[champName][i];
+          championat[champName][i] = team;
         }
-        else if(m_pData->championats[champName][j].PointsCommon() == m_pData->championats[champName][i].PointsCommon() &&
-                m_pData->championats[champName][j].Differince() > m_pData->championats[champName][i].Differince())
+        else if(championat[champName][j].PointsCommon() == championat[champName][i].PointsCommon() &&
+                championat[champName][j].Differince() > championat[champName][i].Differince())
         {
-          CTeam team = m_pData->championats[champName][j];
-          m_pData->championats[champName][j] = m_pData->championats[champName][i];
-          m_pData->championats[champName][i] = team;
+          CTeam team = championat[champName][j];
+          championat[champName][j] = championat[champName][i];
+          championat[champName][i] = team;
         }
       }
     }
   }
 
   //поиск конкурентов
-  foreach(QString champName, m_pData->championats.keys())
+  foreach(QString champName, championat.keys())
   {
-    for(int i = 0; i < m_pData->championats[champName].count(); ++i)
+    for(int i = 0; i < championat[champName].count(); ++i)
     {
       QList<QString> con_s;
-      for(int j = 0; j < m_pData->championats[champName].count(); j++)
+      for(int j = 0; j < championat[champName].count(); j++)
       {
-        if (abs(j - i) <= deltaConcurent)
+        if (abs(j - i) <= m_pData->deltaConcurents.value(champName))
         {
-          con_s << m_pData->championats[champName][j].GetName();
+          con_s << championat[champName][j].GetName();
         }
       }
-      con_s.removeAll(m_pData->championats[champName][i].GetName());
-      m_pData->championats[champName][i].SetConcurents(con_s.toVector());
+      con_s.removeAll(championat[champName][i].GetName());
+      championat[champName][i].SetConcurents(con_s.toVector());
     }
   }
 }
 
-void CFootbolManager::FormDataTeams()
+void CFootbolManager::FormDataTeams(QMap<QString, Championat>& championat)
 {
-  foreach(QString champName, m_pData->championats.keys())
-    for(int i = 0; i < m_pData->championats[champName].count(); ++i)
-      m_pData->championats[champName][i].FormData();
+  foreach(QString champName, championat.keys())
+    for(int i = 0; i < championat[champName].count(); ++i)
+      championat[champName][i].FormData();
 
-  AnalizeCommonPosition();
+  AnalizeCommonPosition(championat);
 
-  foreach(QString champName, m_pData->championats.keys())
-    for(int i = 0; i < m_pData->championats[champName].count(); ++i)
-      m_pData->championats[champName][i].FormDataCommon();
+  foreach(QString champName, championat.keys())
+    for(int i = 0; i < championat[champName].count(); ++i)
+      championat[champName][i].FormDataCommon();
 
-  QVector<int> no_paritysCommon;
-  foreach(QString str, m_pData->championats.keys())
-  {
-    foreach(CTeam team, m_pData->championats.value(str))
-    {
-      no_paritysCommon << team.NoParityesCommon();
-    }
-  }
 
-  qSort(no_paritysCommon);
+//  foreach(QString champName, m_pData->championats.keys())
+//    for(int i = 0; i < m_pData->championats[champName].count(); ++i)
+//      m_pData->championats[champName][i].FormData();
 
-  int max = 14;
-  int overC = 0;
-  foreach(int npc, no_paritysCommon)
-  {
-    if(npc > max)
-      overC++;
-  }
+//  AnalizeCommonPosition();
 
-  double pC = static_cast<double>(overC) / static_cast<double>(no_paritysCommon.count());
+//  foreach(QString champName, m_pData->championats.keys())
+//    for(int i = 0; i < m_pData->championats[champName].count(); ++i)
+//      m_pData->championats[champName][i].FormDataCommon();
 
-  QMap<int, int> map1;
-  foreach(int v, no_paritysCommon)
-  {
-    if (!map1.contains(v))
-      map1.insert(v, 0);
-    map1[v]++;
-  }
+
+
+//  QVector<int> no_paritysCommon;
+//  foreach(QString str, m_pData->championats.keys())
+//  {
+//    foreach(CTeam team, m_pData->championats.value(str))
+//    {
+//      no_paritysCommon << team.NoParityesCommon();
+//    }
+//  }
+
+//  qSort(no_paritysCommon);
+
+//  int max = 14;
+//  int overC = 0;
+//  foreach(int npc, no_paritysCommon)
+//  {
+//    if(npc > max)
+//      overC++;
+//  }
+
+//  double pC = static_cast<double>(overC) / static_cast<double>(no_paritysCommon.count());
+
+//  QMap<int, int> map1;
+//  foreach(int v, no_paritysCommon)
+//  {
+//    if (!map1.contains(v))
+//      map1.insert(v, 0);
+//    map1[v]++;
+//  }
 
 //  int cash = 0;
 //  int koef = 3;

@@ -46,13 +46,6 @@ void CTeam::FormData()
     pointsCommon += match.point;
     differince += match.difference;
   }
-//  pointsCommon = 0;
-//  differince = 0;
-//  foreach(CMatch match, SelectTeamData(GetSeasons()))
-//  {
-//    pointsCommon += match.point;
-//    differince += match.difference;
-//  }
 }
 
 void CTeam::FindCurrentCashParity()
@@ -97,7 +90,7 @@ void CTeam::SetCurrentCashParity(int numCash)
 void CTeam::CropMatches(int num)
 {
   if (m_seasons.count() >= num)
-    m_seasons.remove(num, m_seasons.count() - num);
+    m_seasons.remove(0, m_seasons.count() - num);
 }
 
 void CTeam::Rename(const QString &newName)
