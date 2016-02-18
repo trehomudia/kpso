@@ -16,6 +16,7 @@ struct CMatch
   int point;
   QString opponent;
   int difference;
+  int sum;
 };
 
 typedef QVector<CMatch> Season;

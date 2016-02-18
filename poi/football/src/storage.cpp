@@ -240,6 +240,7 @@ Season CStorage::ReadFile(QString fileName)
       else
         match1.point = 0;
       match1.difference = line[3].toInt() - line[4].toInt();
+      match1.sum = line[3].toInt() + line[4].toInt();
       season << match1;
 
       CMatch match2;
@@ -254,6 +255,7 @@ Season CStorage::ReadFile(QString fileName)
       else
         match2.point = 3;
       match2.difference = line[4].toInt() - line[3].toInt();
+      match2.sum = line[4].toInt() + line[3].toInt();
       season << match2;
     }
   }

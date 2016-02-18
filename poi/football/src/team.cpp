@@ -123,23 +123,6 @@ void CTeam::FormDataCommon()
       }
     }
   }
-
-//  int noParity = 0;
-//  foreach(CMatch match, SelectTeamData(GetSeasons()))
-//  {
-//    if (m_concurents.contains(match.opponent))
-//    {
-//      if(match.point != 1)
-//      {
-//        noParity++;
-//      }
-//      else
-//      {
-//        noParityesCommon << noParity;
-//        noParity = 0;
-//      }
-//    }
-//  }
 }
 
 Season SelectTeamData(const QMap<int, Season>& data)
