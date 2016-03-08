@@ -36,11 +36,17 @@ public:
   void FindCurrentCashParity();
   void SetCurrentCashParity(int numCash);
 
-  QVector<int> NoParityesCommon() {return noParityesCommon;}
+//  QVector<int> NoParityesCommon() {return noParityesCommon;}
   int PointsCommon() {return pointsCommon;}
   int Differince() {return differince;}
 
-  void SetConcurents(QVector<QString> concurents) {m_concurents = concurents;}
+  QVector<int>& NoWins() {return m_noWins;}
+  QVector<int>& Parityes() {return m_parityes;}
+  QVector<int>& NoSum15s() {return m_noSum15s;}
+  QVector<int>& NoSum25s() {return m_noSum25s;}
+  QVector<int>& NoSum35s() {return m_noSum35s;}
+
+  void SetConcurents(QVector<QString> concurents, QMap<QString, int> concurentPositions) {m_concurents = concurents; m_concurentPositions = concurentPositions;}
   QVector<QString> Concurents() {return m_concurents;}
   void ExchengeConcurents(QString concurent, QString distConcurent);
 
@@ -52,14 +58,38 @@ public:
   void Rename(const QString& newName);
 
 private:
+  void FormNoParity();
+  void FormWin();
+  void FormParity();
+  void FormSum();
+
+private:
   QString m_name;
+  QVector<CMatch> m_seasons;
+  QVector<QString> m_concurents;
+  QMap<QString, int> m_concurentPositions;
+
+  QVector<int> m_noParityes;
+  int m_noParity;
+
+  QVector<int> m_noWins;
+  int m_noWin;
+
+  QVector<int> m_parityes;
+  int m_parity;
+
+  QVector<int> m_noSum15s;
+  int m_noSum15;
+
+  QVector<int> m_noSum25s;
+  int m_noSum25;
+
+  QVector<int> m_noSum35s;
+  int m_noSum35;
+
   int cashParityPosition;
   int pointsCommon;
   int differince;
-  QVector<int> noParityesCommon;
-  QVector<QString> m_concurents;
-  QVector<CMatch> m_seasons;
-//  QMap<int, Season> m_seasons;
 };
 
 Season SelectTeamData(const QMap<int, Season>& data);

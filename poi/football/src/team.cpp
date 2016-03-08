@@ -6,6 +6,12 @@ CTeam::CTeam(const QString& name)
   : m_name(name)
   , cashParityPosition(0)
   , pointsCommon(0)
+  , m_noParity(0)
+  , m_noWin(0)
+  , m_parity(0)
+  , m_noSum15(0)
+  , m_noSum25(0)
+  , m_noSum35(0)
 {}
 
 CTeam::CTeam()
@@ -65,21 +71,7 @@ void CTeam::FindCurrentCashParity()
     }
   }
 
-//  QVector<CMatch> matchs;
-//  foreach(int season, m_seasons.keys())
-//    foreach(CMatch match, m_seasons.value(season))
-//      matchs << match;
 
-//  for(int i = matchs.count() - 1; i >= 0; --i)
-//  {
-//    if (m_concurents.contains(matchs[i].opponent))
-//    {
-//      if(matchs.value(i).point != PARITY)
-//        cashParityPosition++;
-//      else
-//        i = 0;
-//    }
-//  }
 }
 
 void CTeam::SetCurrentCashParity(int numCash)
@@ -107,6 +99,14 @@ void CTeam::Rename(const QString &newName)
 
 void CTeam::FormDataCommon()
 {
+  FormNoParity();
+  FormWin();
+  FormParity();
+  FormSum();
+}
+
+void CTeam::FormNoParity()
+{
   int noParity = 0;
   foreach(CMatch match, GetSeasons())
   {
@@ -118,10 +118,152 @@ void CTeam::FormDataCommon()
       }
       else
       {
-        noParityesCommon << noParity;
+        m_noParityes << noParity;
         noParity = 0;
       }
     }
+  }
+
+  for (int i = GetSeasons().count() - 1; i > 0; --i)
+  {
+    if (m_concurents.contains(GetSeasons()[i].opponent))
+    {
+      if(GetSeasons()[i].point != 1)
+        m_noParity++;
+      else
+        i = 0;
+    }
+  }
+}
+
+void CTeam::FormWin()
+{
+  int noWin = 0;
+  foreach(CMatch match, GetSeasons())
+  {
+    if (m_concurents.contains(match.opponent))
+      continue;
+
+    if (m_concurentPositions.value(m_name) > m_concurentPositions.value(match.opponent))
+      continue;
+
+    if (match.point != 3)
+    {
+      noWin++;
+    }
+    else
+    {
+      m_noWins << noWin;
+      noWin = 0;
+    }
+  }
+
+  for (int i = GetSeasons().count() - 1; i > 0; --i)
+  {
+    if (m_concurents.contains(GetSeasons()[i].opponent))
+      continue;
+
+    if (m_concurentPositions.value(m_name) > m_concurentPositions.value(GetSeasons()[i].opponent))
+      continue;
+
+    if (GetSeasons()[i].point != 3)
+      m_noWin++;
+    else
+      i = 0;
+  }
+}
+
+void CTeam::FormParity()
+{
+  int parity = 0;
+  foreach(CMatch match, GetSeasons())
+  {
+    if(match.point == 1)
+    {
+      parity++;
+    }
+    else
+    {
+      m_parityes << parity;
+      parity = 0;
+    }
+  }
+
+  for (int i = GetSeasons().count() - 1; i > 0; --i)
+  {
+    if(GetSeasons()[i].point == 1)
+      m_parity++;
+    else
+      i = 0;
+  }
+}
+
+void CTeam::FormSum()
+{
+  int noSum15 = 0;
+  int noSum25 = 0;
+  int noSum35 = 0;
+  foreach(CMatch match, GetSeasons())
+  {
+    if(static_cast<double>(match.sum) < 1.5)
+    {
+      noSum15++;
+    }
+    else
+    {
+      m_noSum15s << noSum15;
+      noSum15 = 0;
+    }
+  }
+
+  foreach(CMatch match, GetSeasons())
+  {
+    if(static_cast<double>(match.sum) < 2.5)
+    {
+      noSum25++;
+    }
+    else
+    {
+      m_noSum25s << noSum25;
+      noSum25 = 0;
+    }
+  }
+
+  foreach(CMatch match, GetSeasons())
+  {
+    if(static_cast<double>(match.sum) < 3.5)
+    {
+      noSum35++;
+    }
+    else
+    {
+      m_noSum35s << noSum35;
+      noSum35 = 0;
+    }
+  }
+
+  for (int i = GetSeasons().count() - 1; i > 0; --i)
+  {
+    if(static_cast<double>(GetSeasons()[i].sum) < 1.5)
+      m_noSum15++;
+    else
+      i = 0;
+  }
+
+  for (int i = GetSeasons().count() - 1; i > 0; --i)
+  {
+    if(static_cast<double>(GetSeasons()[i].sum) < 2.5)
+      m_noSum25++;
+    else
+      i = 0;
+  }
+
+  for (int i = GetSeasons().count() - 1; i > 0; --i)
+  {
+    if(static_cast<double>(GetSeasons()[i].sum) < 3.5)
+      m_noSum35++;
+    else
+      i = 0;
   }
 }
 

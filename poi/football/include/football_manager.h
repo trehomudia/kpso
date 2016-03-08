@@ -31,6 +31,7 @@ private:
   void FormRates();
   void AnalizeCommonPosition(QMap<QString, Championat>& championat);
   void FormDeltaConcurents();
+  void Analize(QMap<QString, Championat>& championat);
 
   void ShowSource();
   void AddValues(const QString& tableName);
