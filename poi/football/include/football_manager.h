@@ -31,6 +31,7 @@ private:
   void FormRates();
   void AnalizeCommonPosition(QMap<QString, Championat>& championat);
   void FormDeltaConcurents();
+  void FindLowGool(QMap<QString, Championat>& championat);
   void Analize(QMap<QString, Championat>& championat);
 
   void ShowSource();
@@ -38,5 +39,7 @@ private:
   CWidget* AddTable(const QString& tableName);
   QVector<QString> GetSortNextNames(QString champName);
 };
+
+QVector<int> FindCashList(int minCash, double koef, int limit);
 
 #endif // STATISTICA_H

@@ -178,6 +178,9 @@ void CTeam::FormParity()
   int parity = 0;
   foreach(CMatch match, GetSeasons())
   {
+    if (m_concurents.contains(match.opponent))
+      continue;
+
     if(match.point == 1)
     {
       parity++;
@@ -191,6 +194,9 @@ void CTeam::FormParity()
 
   for (int i = GetSeasons().count() - 1; i > 0; --i)
   {
+    if (m_concurents.contains(GetSeasons()[i].opponent))
+      continue;
+
     if(GetSeasons()[i].point == 1)
       m_parity++;
     else
