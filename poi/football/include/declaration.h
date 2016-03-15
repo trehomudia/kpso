@@ -21,7 +21,7 @@ const int PARITY_LIMIT = 15;
 
 const double PARITY_KOEF = 2.5;
 const double NO_PARITY_KOEF = 1.2;
-const double WIN_KOEF = 1.4;
+const double WIN_KOEF = 1.5;
 const double SUM15_KOEF = 1.2;
 const double SUM25_KOEF = 1.7;
 const double SUM35_KOEF = 2.7;

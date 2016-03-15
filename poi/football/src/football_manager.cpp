@@ -158,9 +158,11 @@ void CFootbolManager::Analize(QMap<QString, Championat>& championat)
   QVector<int> noSum25s;
   QVector<int> noSum35s;
 
+  double koefNoParity = 0.005;
+  double koefWin = 0.005;
+  double koefParity = 0.001;
   double koef = 0.0001;
-  double koefParity = 0.0005;
-  double koefWin = 0.002;
+
   foreach(QString campName, championat.keys())
   {
     foreach(CTeam team, championat.value(campName))
@@ -180,16 +182,16 @@ void CFootbolManager::Analize(QMap<QString, Championat>& championat)
   qSort(noSum25s);
   qSort(noSum35s);
 
-  int k1 = noParityes.count() * koef;
-  int k2 = parityes.count() * koefParity;
-  int k3 = noWins.count() * koefWin;
+  int k1 = noParityes.count() * koefNoParity;
+  int k2 = noWins.count() * koefWin;
+  int k3 = parityes.count() * koefParity;
   int k4 = noSum15s.count() * koef;
   int k5 = noSum25s.count() * koef;
   int k6 = noSum35s.count() * koef;
 
-//  noParityes.remove(noParityes.count() - k1, k1);
-//  noWins.remove(noWins.count() - k2, k2);
-//  parityes.remove(parityes.count() - k3, k3);
+  noParityes.remove(noParityes.count() - k1, k1);
+  noWins.remove(noWins.count() - k2, k2);
+  parityes.remove(parityes.count() - k3, k3);
 //  noSum15s.remove(noSum15s.count() - k4, k4);
 //  noSum25s.remove(noSum25s.count() - k5, k5);
 //  noSum35s.remove(noSum35s.count() - k6, k6);
