@@ -151,58 +151,63 @@ void CFootbolManager::FindLowGool(QMap<QString, Championat> &championat)
 
 void CFootbolManager::Analize(QMap<QString, Championat>& championat)
 {
+  QVector<int> noParityes;
+  QVector<int> noWins;
   QVector<int> parityes;
   QVector<int> noSum15s;
   QVector<int> noSum25s;
   QVector<int> noSum35s;
-  QVector<int> noWins;
+
   double koef = 0.0001;
   double koefParity = 0.0005;
-  double koefWin = 0.001;
+  double koefWin = 0.002;
   foreach(QString campName, championat.keys())
   {
     foreach(CTeam team, championat.value(campName))
     {
+      noParityes << team.NoParityes();
+      noWins << team.NoWins();
       parityes << team.Parityes();
       noSum15s << team.NoSum15s();
       noSum25s << team.NoSum25s();
       noSum35s << team.NoSum35s();
-      noWins << team.NoWins();
     }
   }
+  qSort(noParityes);
+  qSort(noWins);
   qSort(parityes);
   qSort(noSum15s);
   qSort(noSum25s);
   qSort(noSum35s);
-  qSort(noWins);
 
-//  int k1 = parityes.count() * koef;
-  int k1 = parityes.count() * koefParity;
-  int k2 = noWins.count() * koefWin;
-  int k3 = noSum15s.count() * koef;
-  int k4 = noSum25s.count() * koef;
-  int k5 = noSum35s.count() * koef;
+  int k1 = noParityes.count() * koef;
+  int k2 = parityes.count() * koefParity;
+  int k3 = noWins.count() * koefWin;
+  int k4 = noSum15s.count() * koef;
+  int k5 = noSum25s.count() * koef;
+  int k6 = noSum35s.count() * koef;
 
-
-//  parityes.remove(parityes.count() - k1, k1);
+//  noParityes.remove(noParityes.count() - k1, k1);
 //  noWins.remove(noWins.count() - k2, k2);
-//  noSum15s.remove(noSum15s.count() - k3, k3);
-//  noSum25s.remove(noSum25s.count() - k4, k4);
-//  noSum35s.remove(noSum35s.count() - k5, k5);
+//  parityes.remove(parityes.count() - k3, k3);
+//  noSum15s.remove(noSum15s.count() - k4, k4);
+//  noSum25s.remove(noSum25s.count() - k5, k5);
+//  noSum35s.remove(noSum35s.count() - k6, k6);
 
 
   QVector<int> v1 = FindCashList(20, PARITY_KOEF, 10000);
-  QVector<int> v2 = FindCashList(20, NO_PARITY_KOEF, 10000);
-  QVector<int> v3 = FindCashList(20, WIN_KOEF, 10000);
+  QVector<int> v2 = FindCashList(20, WIN_KOEF, 10000);
+  QVector<int> v3 = FindCashList(20, NO_PARITY_KOEF, 10000);
   QVector<int> v4 = FindCashList(20, SUM15_KOEF, 10000);
   QVector<int> v5 = FindCashList(20, SUM25_KOEF, 10000);
   QVector<int> v6 = FindCashList(20, SUM35_KOEF, 10000);
 
-  int l1 = parityes.last();
+  int l1 = noParityes.last();
   int l2 = noWins.last();
-  int l3 = noSum15s.last();
-  int l4 = noSum25s.last();
-  int l5 = noSum35s.last();
+  int l3 = parityes.last();
+  int l4 = noSum15s.last();
+  int l5 = noSum25s.last();
+  int l6 = noSum35s.last();
 
   int l = 9;
 }
@@ -335,43 +340,35 @@ void CFootbolManager::AnalizeCommonPosition(QMap<QString, Championat>& championa
 
     for(int i = 0; i < championat[champName].count(); ++i)
     {
+      QList<QString> con_s;
+      int counter = 1;
+      while(con_s.count() < m_pData->deltaConcurents.value(champName) * 2)
+      {
+        if (championat[champName].count() > i + counter)
+          con_s << championat[champName][i + counter].GetName();
+
+        if (i - counter >= 0)
+          con_s << championat[champName][i - counter].GetName();
+
+        counter++;
+      }
+
+      championat[champName][i].SetConcurents(con_s.toVector(), positions);
+
+
 //      QList<QString> con_s;
-//      int count = m_pData->deltaConcurents.value(champName) * 2 + 1;
-//      int num = -1;
 //      for(int j = 0; j < championat[champName].count(); j++)
 //      {
-//        if (abs(j - i) <= m_pData->deltaConcurents.value(champName) * 2)
+//        if (abs(j - i) <= m_pData->deltaConcurents.value(champName))
 //        {
-//          num = j;
-//          j = championat[champName].count();
+//          con_s << championat[champName][j].GetName();
 //        }
 //      }
-
-//      while(count > 0)
-//      {
-//        con_s << championat[champName][num].GetName();
-//        num++;
-//        count--;
-//      }
-
 //      con_s.removeAll(championat[champName][i].GetName());
 //      championat[champName][i].SetConcurents(con_s.toVector(), positions);
-
-
-      QList<QString> con_s;
-      for(int j = 0; j < championat[champName].count(); j++)
-      {
-        if (abs(j - i) <= m_pData->deltaConcurents.value(champName))
-        {
-          con_s << championat[champName][j].GetName();
-        }
-      }
-      con_s.removeAll(championat[champName][i].GetName());
-      championat[champName][i].SetConcurents(con_s.toVector(), positions);
     }
   }
 
-  int k = 9;
 }
 
 void CFootbolManager::FormDataTeams(QMap<QString, Championat>& championat)

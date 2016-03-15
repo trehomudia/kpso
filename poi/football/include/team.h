@@ -40,6 +40,7 @@ public:
   int PointsCommon() {return pointsCommon;}
   int Differince() {return differince;}
 
+  QVector<int>& NoParityes() {return m_noParityes;}
   QVector<int>& NoWins() {return m_noWins;}
   QVector<int>& Parityes() {return m_parityes;}
   QVector<int>& NoSum15s() {return m_noSum15s;}
