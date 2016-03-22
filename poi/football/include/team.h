@@ -123,12 +123,11 @@ class CWidget : public QWidget
 public:
   CWidget(QWidget * parent = 0, Qt::WindowFlags f = 0);
   CStandardItemModel* TableCommon();
-  CStandardItemModel* TableResult();
+  CTableViewWd* View();
 
 signals:
   void doubleClicked(const QModelIndex& index);
   void clicked();
-  void AllChecked(bool);
 
 private:
   Ui::championatWidget ui;

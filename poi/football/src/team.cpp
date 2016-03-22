@@ -358,16 +358,9 @@ CWidget::CWidget(QWidget *parent, Qt::WindowFlags f)
 {
   ui.setupUi(this);
   ui.commonView->setAllColumnsDelegate();
-  ui.resultView->setAllColumnsDelegate();
   CStandardItemModel* tableCommon = new CStandardItemModel(this);
   ui.commonView->setModel(tableCommon);
   tableCommon->SetView(ui.commonView);
-  CStandardItemModel* tableResult = new CStandardItemModel(this);
-  ui.resultView->setModel(tableResult);
-  tableResult->SetView(ui.resultView);
-  connect(ui.resultView, SIGNAL(doubleClicked(const QModelIndex&)), this, SIGNAL(doubleClicked(const QModelIndex&)));
-  connect(ui.pushButton, SIGNAL(clicked()), this, SIGNAL(clicked()));
-  connect(this, SIGNAL(AllChecked(bool)), ui.pushButton, SLOT(setEnabled(bool)));
 }
 
 CStandardItemModel* CWidget::TableCommon()
@@ -376,8 +369,7 @@ CStandardItemModel* CWidget::TableCommon()
   return model;
 }
 
-CStandardItemModel* CWidget::TableResult()
+CTableViewWd* CWidget::View()
 {
-  CStandardItemModel* model = qobject_cast<CStandardItemModel*>(ui.resultView->model());
-  return model;
+  return ui.commonView;
 }
