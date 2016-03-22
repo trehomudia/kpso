@@ -18,24 +18,18 @@ public:
   ~CFootbolManager();
   void Do();
 
-public slots:
-  void onChecked(const QModelIndex & index);
-  void onClicked();
-
 private:
   class PrivateData;
   PrivateData* m_pData;
 
   void ReplaceData();
   void FormDataTeams(QMap<QString, Championat>& championat);
-  void FormRates();
   void AnalizeCommonPosition(QMap<QString, Championat>& championat);
   void FormDeltaConcurents();
   void FindLowGool(QMap<QString, Championat>& championat);
   void Analize(QMap<QString, Championat>& championat);
 
   void ShowSource();
-  void AddValues(const QString& tableName);
   CWidget* AddTable(const QString& tableName);
   QVector<QString> GetSortNextNames(QString champName);
 };

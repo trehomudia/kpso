@@ -211,6 +211,9 @@ void CTeam::FormSum()
   int noSum35 = 0;
   foreach(CMatch match, GetSeasons())
   {
+    if (m_concurents.contains(match.opponent))
+      continue;
+
     if(static_cast<double>(match.sum) < 1.5)
     {
       noSum15++;
@@ -224,6 +227,9 @@ void CTeam::FormSum()
 
   foreach(CMatch match, GetSeasons())
   {
+    if (m_concurents.contains(match.opponent))
+      continue;
+
     if(static_cast<double>(match.sum) < 2.5)
     {
       noSum25++;
@@ -237,6 +243,9 @@ void CTeam::FormSum()
 
   foreach(CMatch match, GetSeasons())
   {
+    if (m_concurents.contains(match.opponent))
+      continue;
+
     if(static_cast<double>(match.sum) < 3.5)
     {
       noSum35++;
@@ -250,6 +259,9 @@ void CTeam::FormSum()
 
   for (int i = GetSeasons().count() - 1; i > 0; --i)
   {
+    if (m_concurents.contains(GetSeasons()[i].opponent))
+      continue;
+
     if(static_cast<double>(GetSeasons()[i].sum) < 1.5)
       m_noSum15++;
     else
@@ -258,6 +270,9 @@ void CTeam::FormSum()
 
   for (int i = GetSeasons().count() - 1; i > 0; --i)
   {
+    if (m_concurents.contains(GetSeasons()[i].opponent))
+      continue;
+
     if(static_cast<double>(GetSeasons()[i].sum) < 2.5)
       m_noSum25++;
     else
@@ -266,6 +281,9 @@ void CTeam::FormSum()
 
   for (int i = GetSeasons().count() - 1; i > 0; --i)
   {
+    if (m_concurents.contains(GetSeasons()[i].opponent))
+      continue;
+
     if(static_cast<double>(GetSeasons()[i].sum) < 3.5)
       m_noSum35++;
     else

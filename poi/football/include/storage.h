@@ -26,29 +26,7 @@ public:
   QVector<QString> GetTeamNames(const QString& champName, const QMap<QString, Championat>& championats);
   Season ReadFile(QString fileName);
 
-
-
-
-
-
-
-
-  bool RateIsEmpty(QString champName);
-  void AddTeam(CTeam team, QString champName, int type);
-  int ReadCurrentRate(QString teamName, QString champName, int type);
-  void ExchangeName(QString teamName, QString champName, int type, QString targetName);
-  void ExchangeRate(QString teamName, QString champName, int type, int targetValue);
-  int Report(QString champName, QString teamName);
-  void Reported(QString champName, QString teamName, int value);
-
-  void CreatePlays(QString champName, NextTur tur);
-  NextTur ReadPlays(QString champName);
-
-signals:
-  void AllChecked(bool);
-
 private:
-
   bool NextContainStr(NextTur nextTur, const QString& str);
 };
 
