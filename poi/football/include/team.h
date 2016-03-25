@@ -60,6 +60,10 @@ public:
 
   int ParityCash(CTeam concurent);
   int WinCash(CTeam concurent);
+  int NoParityCash(CTeam concurent);
+  int Sum15Cash(CTeam concurent);
+  int Sum25Cash(CTeam concurent);
+  int Sum35Cash(CTeam concurent);
 
 private:
   void FormNoParity();

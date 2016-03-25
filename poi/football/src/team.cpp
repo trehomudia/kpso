@@ -310,6 +310,38 @@ int CTeam::WinCash(CTeam concurent)
   return noWinsCashList.value(m_noWin);
 }
 
+int CTeam::NoParityCash(CTeam concurent)
+{
+  if (m_concurents.contains(concurent.GetName()))
+    return 0;
+
+  return parityesCashList.value(m_parity);
+}
+
+int CTeam::Sum15Cash(CTeam concurent)
+{
+  if (m_concurents.contains(concurent.GetName()))
+    return 0;
+
+  return sum15sCashList.value(m_noSum15);
+}
+
+int CTeam::Sum25Cash(CTeam concurent)
+{
+  if (m_concurents.contains(concurent.GetName()))
+    return 0;
+
+  return sum25sCashList.value(m_noSum25);
+}
+
+int CTeam::Sum35Cash(CTeam concurent)
+{
+  if (m_concurents.contains(concurent.GetName()))
+    return 0;
+
+  return sum35sCashList.value(m_noSum35);
+}
+
 Season SelectTeamData(const QMap<int, Season>& data)
 {
   QVector<CMatch> plays;

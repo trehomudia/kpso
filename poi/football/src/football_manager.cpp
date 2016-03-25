@@ -334,7 +334,7 @@ void CFootbolManager::ShowSource()
   {
     CWidget* table = AddTable(champName);
     CStandardItemModel* modelCommon = table->TableCommon();
-    modelCommon->setHorizontalHeaderLabels(QStringList() << "1" << "2" << QObject::trUtf8("На ничью") << QObject::trUtf8("На gобеду"));
+    modelCommon->setHorizontalHeaderLabels(QStringList() << "1" << "2" << QObject::trUtf8("На ничью") << QObject::trUtf8("На победу") << QObject::trUtf8("На отс-е ничьи") << QObject::trUtf8("На сумму > 1.5") << QObject::trUtf8("На сумму > 2.5") << QObject::trUtf8("На сумму > 3.5"));
     for(int i = 0; i < m_pData->nextTurs.value(champName).count(); ++i)
     {
       CTeam t1, t2;
@@ -356,13 +356,13 @@ void CFootbolManager::ShowSource()
       else
         str = tr("(") + t2.GetName() + tr(")");
       modelCommon->setItem(i, 3, new QStandardItem(QString::number(t1.WinCash(t2) + t2.WinCash(t1)) + str));
-
-
+      modelCommon->setItem(i, 4, new QStandardItem(QString::number(t1.NoParityCash(t2) + t2.NoParityCash(t1))));
+      modelCommon->setItem(i, 5, new QStandardItem(QString::number(t1.Sum15Cash(t2) + t2.Sum15Cash(t1))));
+      modelCommon->setItem(i, 6, new QStandardItem(QString::number(t1.Sum25Cash(t2) + t2.Sum25Cash(t1))));
+      modelCommon->setItem(i, 7, new QStandardItem(QString::number(t1.Sum35Cash(t2) + t2.Sum35Cash(t1))));
 
     }
     table->View()->setAllColumnsDelegate();
-//    modelCommon->SetColumns(GetSortNextNames(champName));
-
   }
 }
 

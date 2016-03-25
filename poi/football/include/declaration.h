@@ -29,8 +29,8 @@ const double SUM35_KOEF = 2.7;
 const QList<int> noParityesCashList = QList<int>() << 0 << 0 << 0 << 20 << 33 << 55 << 92 << 153 << 255 << 425 << 708 << 1180 << 1967 << 3278 << 5464 << 9106;
 const QList<int> noWinsCashList = QList<int>() << 0 << 0 << 0 << 20 << 60 << 180 << 540 << 1620 << 4860;
 const QList<int> parityesCashList = QList<int>() << 0 << 0 << 20 << 120 << 720 << 4320;
-const QList<int> noSum15sCashList = QList<int>() << 0 << 0 << 20 << 120 << 720 << 4320;
-const QList<int> noSum25sCashList = QList<int>() << 0 << 0 << 0 << 0 << 20 << 48 << 117 << 284 << 690 << 1675 << 4068 << 9880;
-const QList<int> noSum35sCashList = QList<int>() << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 20 << 31 << 50 << 79 << 125 << 199 << 316 << 502 << 797 << 1266 << 2011 << 3194 << 5072 << 8056;
+const QList<int> sum15sCashList = QList<int>() << 0 << 0 << 20 << 120 << 720 << 4320;
+const QList<int> sum25sCashList = QList<int>() << 0 << 0 << 0 << 0 << 20 << 48 << 117 << 284 << 690 << 1675 << 4068 << 9880;
+const QList<int> sum35sCashList = QList<int>() << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 20 << 31 << 50 << 79 << 125 << 199 << 316 << 502 << 797 << 1266 << 2011 << 3194 << 5072 << 8056;
 
 #endif //DECLARATION_H
