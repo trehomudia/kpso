@@ -334,6 +334,7 @@ void CFootbolManager::ShowSource()
   {
     CWidget* table = AddTable(champName);
     CStandardItemModel* modelCommon = table->TableCommon();
+    modelCommon->setHorizontalHeaderLabels(QStringList() << "1" << "2" << QObject::trUtf8("На ничью") << QObject::trUtf8("На gобеду"));
     for(int i = 0; i < m_pData->nextTurs.value(champName).count(); ++i)
     {
       CTeam t1, t2;
@@ -348,12 +349,18 @@ void CFootbolManager::ShowSource()
 
       modelCommon->setItem(i, 0, new QStandardItem(t1.GetName()));
       modelCommon->setItem(i, 1, new QStandardItem(t2.GetName()));
+      modelCommon->setItem(i, 2, new QStandardItem(QString::number(t1.ParityCash(t2) + t2.ParityCash(t1))));
+      QString str;
+      if(t1.ConcurentPositions().value(t1.GetName()) < t2.ConcurentPositions().value(t2.GetName()))
+        str = tr("(") + t1.GetName() + tr(")");
+      else
+        str = tr("(") + t2.GetName() + tr(")");
+      modelCommon->setItem(i, 3, new QStandardItem(QString::number(t1.WinCash(t2) + t2.WinCash(t1)) + str));
 
 
 
-      table->View()->setAllColumnsDelegate();
     }
-    modelCommon->setHorizontalHeaderLabels(QStringList() << "1" << "2" << QObject::trUtf8("На ничью"));
+    table->View()->setAllColumnsDelegate();
 //    modelCommon->SetColumns(GetSortNextNames(champName));
 
   }

@@ -55,8 +55,11 @@ public:
   int CashParityPosition() {return cashParityPosition;}
 
   void CropMatches(int num);
-
+  QMap<QString, int> ConcurentPositions(){return m_concurentPositions;}
   void Rename(const QString& newName);
+
+  int ParityCash(CTeam concurent);
+  int WinCash(CTeam concurent);
 
 private:
   void FormNoParity();
