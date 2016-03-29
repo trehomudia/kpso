@@ -134,6 +134,7 @@ void CTeam::FormNoParity()
         i = 0;
     }
   }
+  qSort(m_noParityes);
 }
 
 void CTeam::FormWin()
@@ -171,6 +172,7 @@ void CTeam::FormWin()
     else
       i = 0;
   }
+  qSort(m_noWins);
 }
 
 void CTeam::FormParity()
@@ -202,6 +204,7 @@ void CTeam::FormParity()
     else
       i = 0;
   }
+  qSort(m_parityes);
 }
 
 void CTeam::FormSum()
@@ -289,12 +292,15 @@ void CTeam::FormSum()
     else
       i = 0;
   }
+  qSort(m_noSum15s);
+  qSort(m_noSum25s);
+  qSort(m_noSum35s);
 }
 
 int CTeam::ParityCash(CTeam concurent)
 {
   if(m_concurents.contains(concurent.GetName()))
-    return noParityesCashList.value(m_noParity);
+    return noParityesCashListCommon.value(m_noParity);
   else
     return 0;
 }
@@ -307,7 +313,7 @@ int CTeam::WinCash(CTeam concurent)
   if (m_concurentPositions.value(GetName()) > m_concurentPositions.value(concurent.GetName()))
     return 0;
 
-  return noWinsCashList.value(m_noWin);
+  return noWinsCashListCommon.value(m_noWin);
 }
 
 int CTeam::NoParityCash(CTeam concurent)
@@ -315,7 +321,7 @@ int CTeam::NoParityCash(CTeam concurent)
   if (m_concurents.contains(concurent.GetName()))
     return 0;
 
-  return parityesCashList.value(m_parity);
+  return parityesCashListCommon.value(m_parity);
 }
 
 int CTeam::Sum15Cash(CTeam concurent)
@@ -323,7 +329,7 @@ int CTeam::Sum15Cash(CTeam concurent)
   if (m_concurents.contains(concurent.GetName()))
     return 0;
 
-  return sum15sCashList.value(m_noSum15);
+  return sum15sCashListCommon.value(m_noSum15);
 }
 
 int CTeam::Sum25Cash(CTeam concurent)
@@ -331,7 +337,7 @@ int CTeam::Sum25Cash(CTeam concurent)
   if (m_concurents.contains(concurent.GetName()))
     return 0;
 
-  return sum25sCashList.value(m_noSum25);
+  return sum25sCashListCommon.value(m_noSum25);
 }
 
 int CTeam::Sum35Cash(CTeam concurent)
@@ -339,7 +345,7 @@ int CTeam::Sum35Cash(CTeam concurent)
   if (m_concurents.contains(concurent.GetName()))
     return 0;
 
-  return sum35sCashList.value(m_noSum35);
+  return sum35sCashListCommon.value(m_noSum35);
 }
 
 Season SelectTeamData(const QMap<int, Season>& data)
