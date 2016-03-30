@@ -107,7 +107,10 @@ void CFootbolManager::FormDeltaConcurents()
 {
   m_pData->deltaConcurents.clear();
   foreach(QString name, m_pData->nextTurs.keys())
-    m_pData->deltaConcurents.insert(name, m_pData->nextTurs.value(name).count() / 2 - 1);
+    m_pData->deltaConcurents.insert(name, m_pData->nextTurs.value(name).count() / 2 - 2);
+//  m_pData->deltaConcurents.clear();
+//  foreach(QString name, m_pData->nextTurs.keys())
+//    m_pData->deltaConcurents.insert(name, m_pData->nextTurs.value(name).count() / 2 - 1);
 }
 
 void CFootbolManager::Do()
@@ -189,12 +192,12 @@ void CFootbolManager::Analize(QMap<QString, Championat>& championat)
   int k5 = noSum25s.count() * koefSum;
   int k6 = noSum35s.count() * koefSum;
 
-  noParityes.remove(noParityes.count() - k1, k1);
-  noWins.remove(noWins.count() - k2, k2);
-  parityes.remove(parityes.count() - k3, k3);
-  noSum15s.remove(noSum15s.count() - k4, k4);
-  noSum25s.remove(noSum25s.count() - k5, k5);
-  noSum35s.remove(noSum35s.count() - k6, k6);
+//  noParityes.remove(noParityes.count() - k1, k1);
+//  noWins.remove(noWins.count() - k2, k2);
+//  parityes.remove(parityes.count() - k3, k3);
+//  noSum15s.remove(noSum15s.count() - k4, k4);
+//  noSum25s.remove(noSum25s.count() - k5, k5);
+//  noSum35s.remove(noSum35s.count() - k6, k6);
 
 
   QVector<int> v1 = FindCashList(20, PARITY_KOEF, 10000);

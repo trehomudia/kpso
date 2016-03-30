@@ -110,29 +110,29 @@ void CTeam::FormNoParity()
   int noParity = 0;
   foreach(CMatch match, GetSeasons())
   {
-    if (m_concurents.contains(match.opponent))
+    if (!m_concurents.contains(match.opponent))
+      continue;
+
+    if(match.point != 1)
     {
-      if(match.point != 1)
-      {
-        noParity++;
-      }
-      else
-      {
-        m_noParityes << noParity;
-        noParity = 0;
-      }
+      noParity++;
+    }
+    else
+    {
+      m_noParityes << noParity;
+      noParity = 0;
     }
   }
 
   for (int i = GetSeasons().count() - 1; i > 0; --i)
   {
-    if (m_concurents.contains(GetSeasons()[i].opponent))
-    {
-      if(GetSeasons()[i].point != 1)
-        m_noParity++;
-      else
-        i = 0;
-    }
+    if (!m_concurents.contains(GetSeasons()[i].opponent))
+      continue;
+
+    if(GetSeasons()[i].point != 1)
+      m_noParity++;
+    else
+      i = 0;
   }
   qSort(m_noParityes);
 }
