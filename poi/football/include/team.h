@@ -58,12 +58,12 @@ public:
   QMap<QString, int> ConcurentPositions(){return m_concurentPositions;}
   void Rename(const QString& newName);
 
-  int ParityCash(CTeam concurent);
-  int WinCash(CTeam concurent);
-  int NoParityCash(CTeam concurent);
-  int Sum15Cash(CTeam concurent);
-  int Sum25Cash(CTeam concurent);
-  int Sum35Cash(CTeam concurent);
+  int ParityCash(CTeam concurent, QVector<int> cashList);
+  int WinCash(CTeam concurent, QVector<int> cashList);
+  int NoParityCash(CTeam concurent, QVector<int> cashList);
+  int Sum15Cash(CTeam concurent, QVector<int> cashList);
+  int Sum25Cash(CTeam concurent, QVector<int> cashList);
+  int Sum35Cash(CTeam concurent, QVector<int> cashList);
 
   QVector<int> NoParityesCashList(){return m_noParityCash;}
   QVector<int> NoWinCashList(){return m_noWinCash;}

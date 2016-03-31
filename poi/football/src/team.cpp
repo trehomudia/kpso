@@ -297,15 +297,20 @@ void CTeam::FormSum()
   qSort(m_noSum35s);
 }
 
-int CTeam::ParityCash(CTeam concurent)
+int CTeam::ParityCash(CTeam concurent, QVector<int> cashList)
 {
   if(m_concurents.contains(concurent.GetName()))
-    return noParityesCashListCommon.value(m_noParity);
+  {
+    if (m_noParity < cashList.count())
+      return cashList.value(m_noParity);
+    else
+      return -99999;
+  }
   else
     return 0;
 }
 
-int CTeam::WinCash(CTeam concurent)
+int CTeam::WinCash(CTeam concurent, QVector<int> cashList)
 {
   if (m_concurents.contains(concurent.GetName()))
     return 0;
@@ -313,39 +318,54 @@ int CTeam::WinCash(CTeam concurent)
   if (m_concurentPositions.value(GetName()) > m_concurentPositions.value(concurent.GetName()))
     return 0;
 
-  return noWinsCashListCommon.value(m_noWin);
+  if (m_noWin < cashList.count())
+    return cashList.value(m_noWin);
+  else
+    return -99999;
 }
 
-int CTeam::NoParityCash(CTeam concurent)
+int CTeam::NoParityCash(CTeam concurent, QVector<int> cashList)
 {
   if (m_concurents.contains(concurent.GetName()))
     return 0;
 
-  return parityesCashListCommon.value(m_parity);
+  if(m_parity < cashList.count())
+    return cashList.value(m_parity);
+  else
+    return -99999;
 }
 
-int CTeam::Sum15Cash(CTeam concurent)
+int CTeam::Sum15Cash(CTeam concurent, QVector<int> cashList)
 {
   if (m_concurents.contains(concurent.GetName()))
     return 0;
 
-  return sum15sCashListCommon.value(m_noSum15);
+  if (m_noSum15 < cashList.count())
+    return cashList.value(m_noSum15);
+  else
+    return -99999;
 }
 
-int CTeam::Sum25Cash(CTeam concurent)
+int CTeam::Sum25Cash(CTeam concurent, QVector<int> cashList)
 {
   if (m_concurents.contains(concurent.GetName()))
     return 0;
 
-  return sum25sCashListCommon.value(m_noSum25);
+  if (m_noSum25 < cashList.count())
+    return cashList.value(m_noSum25);
+  else
+    return -99999;
 }
 
-int CTeam::Sum35Cash(CTeam concurent)
+int CTeam::Sum35Cash(CTeam concurent, QVector<int> cashList)
 {
   if (m_concurents.contains(concurent.GetName()))
     return 0;
 
-  return sum35sCashListCommon.value(m_noSum35);
+  if (m_noSum35 < cashList.count())
+    return cashList.value(m_noSum35);
+  else
+    return -99999;
 }
 
 Season SelectTeamData(const QMap<int, Season>& data)
