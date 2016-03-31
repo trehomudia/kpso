@@ -34,6 +34,6 @@ private:
   QVector<QString> GetSortNextNames(QString champName);
 };
 
-QVector<int> FindCashList(int minCash, double koef, int limit);
+QVector<int> FindCashList(int minCash, double koef, int limit, int count);
 
 #endif // STATISTICA_H

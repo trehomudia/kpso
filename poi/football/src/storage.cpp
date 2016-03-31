@@ -65,10 +65,10 @@ QStringList CStorage::GetFileNames(const QString& champName, int confidentialSea
   QStringList list;
   if (champName == "russia")
   {
-    list << "../../skotina/poi/football/resource/data/russia/02.csv";
-    list << "../../skotina/poi/football/resource/data/russia/03.csv";
-    list << "../../skotina/poi/football/resource/data/russia/04.csv";
-    list << "../../skotina/poi/football/resource/data/russia/05.csv";
+//    list << "../../skotina/poi/football/resource/data/russia/02.csv";
+//    list << "../../skotina/poi/football/resource/data/russia/03.csv";
+//    list << "../../skotina/poi/football/resource/data/russia/04.csv";
+//    list << "../../skotina/poi/football/resource/data/russia/05.csv";
     list << "../../skotina/poi/football/resource/data/russia/06.csv";
     list << "../../skotina/poi/football/resource/data/russia/07.csv";
     list << "../../skotina/poi/football/resource/data/russia/08.csv";

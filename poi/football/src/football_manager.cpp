@@ -23,6 +23,12 @@ public:
 
   QVector<QString> lowGoalListBigData;
   QVector<QString> lowGoalListChampionats;
+  QMap<QString, QVector<int> > parityeCash;
+  QMap<QString, QVector<int> > winCash;
+  QMap<QString, QVector<int> > noParityCash;
+  QMap<QString, QVector<int> > sum15Cash;
+  QMap<QString, QVector<int> > sum25Cash;
+  QMap<QString, QVector<int> > sum35Cash;
 };
 
 CFootbolManager::CFootbolManager(QWidget *parent)
@@ -108,9 +114,6 @@ void CFootbolManager::FormDeltaConcurents()
   m_pData->deltaConcurents.clear();
   foreach(QString name, m_pData->nextTurs.keys())
     m_pData->deltaConcurents.insert(name, m_pData->nextTurs.value(name).count() / 2 - 2);
-//  m_pData->deltaConcurents.clear();
-//  foreach(QString name, m_pData->nextTurs.keys())
-//    m_pData->deltaConcurents.insert(name, m_pData->nextTurs.value(name).count() / 2 - 1);
 }
 
 void CFootbolManager::Do()
@@ -125,7 +128,6 @@ void CFootbolManager::Do()
   FindLowGool(m_pData->bigData);
   FindLowGool(m_pData->championats);
   Analize(m_pData->bigData);
-  Analize(m_pData->championats);
 
   ShowSource();
 }
@@ -154,20 +156,20 @@ void CFootbolManager::FindLowGool(QMap<QString, Championat> &championat)
 
 void CFootbolManager::Analize(QMap<QString, Championat>& championat)
 {
-  QVector<int> noParityes;
-  QVector<int> noWins;
-  QVector<int> parityes;
-  QVector<int> noSum15s;
-  QVector<int> noSum25s;
-  QVector<int> noSum35s;
-
-  double koefNoParity = 0.005;
-  double koefWin = 0.005;
-  double koefParity = 0.001;
-  double koefSum = 0.001;
-
   foreach(QString campName, championat.keys())
   {
+    QVector<int> noParityes;
+    QVector<int> noWins;
+    QVector<int> parityes;
+    QVector<int> noSum15s;
+    QVector<int> noSum25s;
+    QVector<int> noSum35s;
+
+    double koefNoParity = 0.004;
+    double koefWin = 0.004;
+    double koefParity = 0.001;
+    double koefSum = 0.001;
+
     foreach(CTeam team, championat.value(campName))
     {
       noParityes << team.NoParityes();
@@ -177,20 +179,90 @@ void CFootbolManager::Analize(QMap<QString, Championat>& championat)
       noSum25s << team.NoSum25s();
       noSum35s << team.NoSum35s();
     }
-  }
-  qSort(noParityes);
-  qSort(noWins);
-  qSort(parityes);
-  qSort(noSum15s);
-  qSort(noSum25s);
-  qSort(noSum35s);
 
-  int k1 = noParityes.count() * koefNoParity;
-  int k2 = noWins.count() * koefWin;
-  int k3 = parityes.count() * koefParity;
-  int k4 = noSum15s.count() * koefSum;
-  int k5 = noSum25s.count() * koefSum;
-  int k6 = noSum35s.count() * koefSum;
+    qSort(noParityes);
+    qSort(noWins);
+    qSort(parityes);
+    qSort(noSum15s);
+    qSort(noSum25s);
+    qSort(noSum35s);
+
+    int k1 = noParityes.count() * koefNoParity;
+    int k2 = noWins.count() * koefWin;
+    int k3 = parityes.count() * koefParity;
+    int k4 = noSum15s.count() * koefSum;
+    int k5 = noSum25s.count() * koefSum;
+    int k6 = noSum35s.count() * koefSum;
+
+    noParityes.remove(noParityes.count() - k1, k1);
+    noWins.remove(noWins.count() - k2, k2);
+    parityes.remove(parityes.count() - k3, k3);
+    noSum15s.remove(noSum15s.count() - k4, k4);
+    noSum25s.remove(noSum25s.count() - k5, k5);
+    noSum35s.remove(noSum35s.count() - k6, k6);
+
+    int l1 = noParityes.last();
+    int l2 = noWins.last();
+    int l3 = parityes.last();
+    int l4 = noSum15s.last();
+    int l5 = noSum25s.last();
+    int l6 = noSum35s.last();
+
+    m_pData->parityeCash.insert(campName, FindCashList(20, PARITY_KOEF, 10000, noParityes.last()));
+    m_pData->winCash.insert(campName, FindCashList(20, WIN_KOEF, 10000, noWins.last()));
+    m_pData->noParityCash.insert(campName, FindCashList(20, NO_PARITY_KOEF, 10000, parityes.last()));
+    m_pData->sum15Cash.insert(campName, FindCashList(20, SUM15_KOEF, 10000, noSum15s.last()));
+    m_pData->sum25Cash.insert(campName, FindCashList(20, SUM25_KOEF, 10000, noSum25s.last()));
+    m_pData->sum35Cash.insert(campName, FindCashList(20, SUM35_KOEF, 10000, noSum35s.last()));
+  }
+
+
+
+
+
+
+
+
+
+
+
+//  QVector<int> noParityes;
+//  QVector<int> noWins;
+//  QVector<int> parityes;
+//  QVector<int> noSum15s;
+//  QVector<int> noSum25s;
+//  QVector<int> noSum35s;
+
+//  double koefNoParity = 0.005;
+//  double koefWin = 0.005;
+//  double koefParity = 0.001;
+//  double koefSum = 0.001;
+
+//  foreach(QString campName, championat.keys())
+//  {
+//    foreach(CTeam team, championat.value(campName))
+//    {
+//      noParityes << team.NoParityes();
+//      noWins << team.NoWins();
+//      parityes << team.Parityes();
+//      noSum15s << team.NoSum15s();
+//      noSum25s << team.NoSum25s();
+//      noSum35s << team.NoSum35s();
+//    }
+//  }
+//  qSort(noParityes);
+//  qSort(noWins);
+//  qSort(parityes);
+//  qSort(noSum15s);
+//  qSort(noSum25s);
+//  qSort(noSum35s);
+
+//  int k1 = noParityes.count() * koefNoParity;
+//  int k2 = noWins.count() * koefWin;
+//  int k3 = parityes.count() * koefParity;
+//  int k4 = noSum15s.count() * koefSum;
+//  int k5 = noSum25s.count() * koefSum;
+//  int k6 = noSum35s.count() * koefSum;
 
 //  noParityes.remove(noParityes.count() - k1, k1);
 //  noWins.remove(noWins.count() - k2, k2);
@@ -200,21 +272,21 @@ void CFootbolManager::Analize(QMap<QString, Championat>& championat)
 //  noSum35s.remove(noSum35s.count() - k6, k6);
 
 
-  QVector<int> v1 = FindCashList(20, PARITY_KOEF, 10000);
-  QVector<int> v2 = FindCashList(20, WIN_KOEF, 10000);
-  QVector<int> v3 = FindCashList(20, NO_PARITY_KOEF, 10000);
-  QVector<int> v4 = FindCashList(20, SUM15_KOEF, 10000);
-  QVector<int> v5 = FindCashList(20, SUM25_KOEF, 10000);
-  QVector<int> v6 = FindCashList(20, SUM35_KOEF, 10000);
+////  QVector<int> v1 = FindCashList(20, PARITY_KOEF, 10000);
+////  QVector<int> v2 = FindCashList(20, WIN_KOEF, 10000);
+////  QVector<int> v3 = FindCashList(20, NO_PARITY_KOEF, 10000);
+////  QVector<int> v4 = FindCashList(20, SUM15_KOEF, 10000);
+////  QVector<int> v5 = FindCashList(20, SUM25_KOEF, 10000);
+////  QVector<int> v6 = FindCashList(20, SUM35_KOEF, 10000);
 
-  int l1 = noParityes.last();
-  int l2 = noWins.last();
-  int l3 = parityes.last();
-  int l4 = noSum15s.last();
-  int l5 = noSum25s.last();
-  int l6 = noSum35s.last();
+//  int l1 = noParityes.last();
+//  int l2 = noWins.last();
+//  int l3 = parityes.last();
+//  int l4 = noSum15s.last();
+//  int l5 = noSum25s.last();
+//  int l6 = noSum35s.last();
 
-  int l = 9;
+//  int l = 9;
 }
 
 void CFootbolManager::AnalizeCommonPosition(QMap<QString, Championat>& championat)
@@ -377,7 +449,7 @@ CWidget* CFootbolManager::AddTable(const QString& tableName)
   return widget;
 }
 
-QVector<int> FindCashList(int minCash, double koef, int limit)
+QVector<int> FindCashList(int minCash, double koef, int limit, int count)
 {
   QVector<int> vector;
   int current = minCash;
@@ -389,5 +461,28 @@ QVector<int> FindCashList(int minCash, double koef, int limit)
       sum += value;
     current = sum / (koef - 1) + minCash;
   }
+
+  if (vector.count() >= count)
+  {
+    if(count / 10 >= 1)
+    {
+      vector.push_front(0);
+      vector.push_front(0);
+    }
+    else
+    {
+      vector.push_front(0);
+    }
+  }
+  else
+  {
+    count++;
+  }
+
+  while (vector.count() < count)
+    vector.push_front(0);
+
+
+
   return vector;
 }

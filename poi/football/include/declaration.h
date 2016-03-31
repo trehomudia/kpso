@@ -24,7 +24,8 @@ const double NO_PARITY_KOEF = 1.2;
 const double WIN_KOEF = 1.5;
 const double SUM15_KOEF = 1.2;
 const double SUM25_KOEF = 1.7;
-const double SUM35_KOEF = 2.7;
+//const double SUM35_KOEF = 2.7;
+const double SUM35_KOEF = 1.15;
 
 const QList<int> noParityesCashListCommon = QList<int>() << 0 << 0 << 0 << 20 << 33 << 55 << 92 << 153 << 255 << 425 << 708 << 1180 << 1967 << 3278 << 5464 << 9106;
 const QList<int> noWinsCashListCommon = QList<int>() << 0 << 0 << 0 << 20 << 60 << 180 << 540 << 1620 << 4860;
