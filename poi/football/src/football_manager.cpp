@@ -409,7 +409,7 @@ void CFootbolManager::ShowSource()
   {
     CWidget* table = AddTable(champName);
     CStandardItemModel* modelCommon = table->TableCommon();
-    modelCommon->setHorizontalHeaderLabels(QStringList() << "1" << "2" << QObject::trUtf8("На ничью") << QObject::trUtf8("На победу") << QObject::trUtf8("На отс-е ничьи") << QObject::trUtf8("На сумму > 1.5") << QObject::trUtf8("На сумму > 2.5") << QObject::trUtf8("На сумму > 3.5"));
+    modelCommon->setHorizontalHeaderLabels(QStringList() << "1" << "2" << QObject::trUtf8("На ничью") << QObject::trUtf8("На победу") << QObject::trUtf8("На отс-е ничьи") << QObject::trUtf8("На сумму > 1.5") << QObject::trUtf8("На сумму > 2.5") << QObject::trUtf8("На сумму < 3.5"));
     for(int i = 0; i < m_pData->nextTurs.value(champName).count(); ++i)
     {
       CTeam t1, t2;
@@ -439,42 +439,6 @@ void CFootbolManager::ShowSource()
     }
     table->View()->setAllColumnsDelegate();
   }
-
-
-//  foreach(QString champName, m_pData->championats.keys())
-//  {
-//    CWidget* table = AddTable(champName);
-//    CStandardItemModel* modelCommon = table->TableCommon();
-//    modelCommon->setHorizontalHeaderLabels(QStringList() << "1" << "2" << QObject::trUtf8("На ничью") << QObject::trUtf8("На победу") << QObject::trUtf8("На отс-е ничьи") << QObject::trUtf8("На сумму > 1.5") << QObject::trUtf8("На сумму > 2.5") << QObject::trUtf8("На сумму > 3.5"));
-//    for(int i = 0; i < m_pData->nextTurs.value(champName).count(); ++i)
-//    {
-//      CTeam t1, t2;
-//      foreach(CTeam team, m_pData->championats.value(champName))
-//      {
-//        if(team.GetName() == m_pData->nextTurs.value(champName)[i].first)
-//          t1 = team;
-
-//        if(team.GetName() == m_pData->nextTurs.value(champName)[i].second)
-//          t2 = team;
-//      }
-
-//      modelCommon->setItem(i, 0, new QStandardItem(t1.GetName()));
-//      modelCommon->setItem(i, 1, new QStandardItem(t2.GetName()));
-//      modelCommon->setItem(i, 2, new QStandardItem(QString::number(t1.ParityCash(t2) + t2.ParityCash(t1))));
-//      QString str;
-//      if(t1.ConcurentPositions().value(t1.GetName()) < t2.ConcurentPositions().value(t2.GetName()))
-//        str = tr("(") + t1.GetName() + tr(")");
-//      else
-//        str = tr("(") + t2.GetName() + tr(")");
-//      modelCommon->setItem(i, 3, new QStandardItem(QString::number(t1.WinCash(t2) + t2.WinCash(t1)) + str));
-//      modelCommon->setItem(i, 4, new QStandardItem(QString::number(t1.NoParityCash(t2) + t2.NoParityCash(t1))));
-//      modelCommon->setItem(i, 5, new QStandardItem(QString::number(t1.Sum15Cash(t2) + t2.Sum15Cash(t1))));
-//      modelCommon->setItem(i, 6, new QStandardItem(QString::number(t1.Sum25Cash(t2) + t2.Sum25Cash(t1))));
-//      modelCommon->setItem(i, 7, new QStandardItem(QString::number(t1.Sum35Cash(t2) + t2.Sum35Cash(t1))));
-
-//    }
-//    table->View()->setAllColumnsDelegate();
-//  }
 }
 
 CWidget* CFootbolManager::AddTable(const QString& tableName)

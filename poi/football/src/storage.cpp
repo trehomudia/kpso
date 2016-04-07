@@ -79,9 +79,10 @@ QStringList CStorage::GetFileNames(const QString& champName, int confidentialSea
     list << "../../skotina/poi/football/resource/data/russia/13.csv";
     list << "../../skotina/poi/football/resource/data/russia/14.csv";
     list << "../../skotina/poi/football/resource/data/russia/15.csv";
-    //list << "../../skotina/poi/football/resource/data/russia/14!.csv";
 //    list << "../../skotina/poi/football/resource/data/russia/15!.csv";
 //    list << "../../skotina/poi/football/resource/data/russia/15!!.csv";
+//    list << "../../skotina/poi/football/resource/data/russia/15!!!.csv";
+//    list << "../../skotina/poi/football/resource/data/russia/15!!!!.csv";
   }
   else if(champName == "england")
   {
@@ -95,6 +96,10 @@ QStringList CStorage::GetFileNames(const QString& champName, int confidentialSea
     list << "../../skotina/poi/football/resource/data/england/13.csv";
     list << "../../skotina/poi/football/resource/data/england/14.csv";
     list << "../../skotina/poi/football/resource/data/england/15.csv";
+//    list << "../../skotina/poi/football/resource/data/england/15!.csv";
+//    list << "../../skotina/poi/football/resource/data/england/15!!.csv";
+//    list << "../../skotina/poi/football/resource/data/england/15!!!.csv";
+//    list << "../../skotina/poi/football/resource/data/england/15!!!!.csv";
   }
   else if(champName == "spain")
   {
@@ -108,6 +113,10 @@ QStringList CStorage::GetFileNames(const QString& champName, int confidentialSea
     list << "../../skotina/poi/football/resource/data/spain/13.csv";
     list << "../../skotina/poi/football/resource/data/spain/14.csv";
     list << "../../skotina/poi/football/resource/data/spain/15.csv";
+//    list << "../../skotina/poi/football/resource/data/spain/15!.csv";
+//    list << "../../skotina/poi/football/resource/data/spain/15!!.csv";
+//    list << "../../skotina/poi/football/resource/data/spain/15!!!.csv";
+//    list << "../../skotina/poi/football/resource/data/spain/15!!!!.csv";
   }
   else if(champName == "italy")
   {
@@ -121,6 +130,10 @@ QStringList CStorage::GetFileNames(const QString& champName, int confidentialSea
     list << "../../skotina/poi/football/resource/data/italy/13.csv";
     list << "../../skotina/poi/football/resource/data/italy/14.csv";
     list << "../../skotina/poi/football/resource/data/italy/15.csv";
+//    list << "../../skotina/poi/football/resource/data/italy/15!.csv";
+//    list << "../../skotina/poi/football/resource/data/italy/15!!.csv";
+//    list << "../../skotina/poi/football/resource/data/italy/15!!!.csv";
+//    list << "../../skotina/poi/football/resource/data/italy/15!!!!.csv";
   }
   else if(champName == "germany")
   {
@@ -134,6 +147,10 @@ QStringList CStorage::GetFileNames(const QString& champName, int confidentialSea
     list << "../../skotina/poi/football/resource/data/germany/13.csv";
     list << "../../skotina/poi/football/resource/data/germany/14.csv";
     list << "../../skotina/poi/football/resource/data/germany/15.csv";
+//    list << "../../skotina/poi/football/resource/data/germany/15!.csv";
+//    list << "../../skotina/poi/football/resource/data/germany/15!!.csv";
+//    list << "../../skotina/poi/football/resource/data/germany/15!!!.csv";
+//    list << "../../skotina/poi/football/resource/data/germany/15!!!!.csv";
   }
   else if(champName == "france")
   {
@@ -147,6 +164,10 @@ QStringList CStorage::GetFileNames(const QString& champName, int confidentialSea
     list << "../../skotina/poi/football/resource/data/france/13.csv";
     list << "../../skotina/poi/football/resource/data/france/14.csv";
     list << "../../skotina/poi/football/resource/data/france/15.csv";
+//    list << "../../skotina/poi/football/resource/data/france/15!.csv";
+//    list << "../../skotina/poi/football/resource/data/france/15!!.csv";
+//    list << "../../skotina/poi/football/resource/data/france/15!!!.csv";
+//    list << "../../skotina/poi/football/resource/data/france/15!!!!.csv";
   }
 
   if (0 == confidentialSeasons)
