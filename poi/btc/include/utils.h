@@ -1,3 +1,10 @@
+/**
+	@file utils.h 
+	@defgroup utils СѓС‚РёР»РёС‚С‹
+    @{ 
+    
+     
+*/
 #ifndef UTILS_H
 #define UTILS_H
 
@@ -17,12 +24,14 @@ typedef std::pair< FuncPoint, FuncPoint >	FuncInterval;
 
 struct IncreasePercentResult
 {
-	int		n;								//!< количество интервалов возрастания
-	int		dt;								//!< разница в секундах между концом последнего интервала и началом первого
-	double	increasePercent;				//!< общее увеличение без учета комиссии
-	double	increasePercentWithComission;	//!< общее увеличение с учетом комиссии
+	int		n;								//!< РєРѕР»РёС‡РµСЃС‚РІРѕ РёРЅС‚РµСЂРІР°Р»РѕРІ РІРѕР·СЂР°СЃС‚Р°РЅРёСЏ
+	int		dt;								//!< СЂР°Р·РЅРёС†Р° РІ СЃРµРєСѓРЅРґР°С… РјРµР¶РґСѓ РєРѕРЅС†РѕРј РїРѕСЃР»РµРґРЅРµРіРѕ РёРЅС‚РµСЂРІР°Р»Р° Рё РЅР°С‡Р°Р»РѕРј РїРµСЂРІРѕРіРѕ
+	double	increasePercent;				//!< РѕР±С‰РµРµ СѓРІРµР»РёС‡РµРЅРёРµ Р±РµР· СѓС‡РµС‚Р° РєРѕРјРёСЃСЃРёРё
+	double	increasePercentWithComission;	//!< РѕР±С‰РµРµ СѓРІРµР»РёС‡РµРЅРёРµ СЃ СѓС‡РµС‚РѕРј РєРѕРјРёСЃСЃРёРё
 };
 
+/** @brief РѕС‡РµРЅСЊ РїРѕР»РµР·РЅР°СЏ С„СѓРЅРєС†РёСЏ
+*/
 QVector< QPair< double, double > > GetPriceSamplesFromCsvFile(const QString separator = ";");
 
 std::vector< FuncPoint > ConvertQVectorQPairToStd(QVector< QPair< double, double > > &qVectorQPair);
@@ -31,7 +40,7 @@ QVector< QPair< double, double > > ConvertStdVectorStdPairToQt(std::vector< Func
 
 IncreasePercentResult GetIncreasePercent( std::vector< FuncInterval > &increaseIntervalVec, double comissionPercent = 0.0 );
 
-/**	"ускоренный" вариант без промежуточных данных */
+/**	@brief "СѓСЃРєРѕСЂРµРЅРЅС‹Р№" РІР°СЂРёР°РЅС‚ Р±РµР· РїСЂРѕРјРµР¶СѓС‚РѕС‡РЅС‹С… РґР°РЅРЅС‹С… */
 IncreasePercentResult GetIncreasePercent( std::vector< FuncPoint > &dependence, int winWidth, int step, double comissionPercent = 0.0 );
 
 
@@ -52,8 +61,8 @@ class CDoubleSpinBox : public QDoubleSpinBox
 {
   Q_OBJECT
 public:
-  CDoubleSpinBox(QWidget * parent = 0);   //!< Конструктор.
-  virtual ~CDoubleSpinBox() {}            //!< Деструктор.
+  CDoubleSpinBox(QWidget * parent = 0);   //!< РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ.
+  virtual ~CDoubleSpinBox() {}            //!< Р”РµСЃС‚СЂСѓРєС‚РѕСЂ.
 
 signals:
   void EditingFinished(double);
@@ -69,8 +78,8 @@ class CSpinBox : public QSpinBox
 {
   Q_OBJECT
 public:
-  CSpinBox(QWidget * parent = 0); //!< Конструктор.
-  virtual ~CSpinBox() {}          //!< Деструктор.
+  CSpinBox(QWidget * parent = 0); //!< РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ.
+  virtual ~CSpinBox() {}          //!< Р”РµСЃС‚СЂСѓРєС‚РѕСЂ.
 
 signals:
   void EditingFinished(int);
@@ -82,5 +91,7 @@ private:
 	int val;
 };
 
+
+/**	@} */
 
 #endif // UTILS_H

@@ -243,7 +243,7 @@ void CTimePlot::FormPriceLine()
 		points << QPointF(m_pData->m_samples[i].first, m_pData->m_samples[i].second);
 	}
 
-	QColor color(157, 140, 47);
+	QColor color(231, 150, 14);
 	color.setAlpha(190);
 
 	QPen pen;

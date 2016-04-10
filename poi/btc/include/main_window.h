@@ -10,8 +10,10 @@ class CBtcMainWindow : public QMainWindow, public Ui::MainWindow
 
 public:
 
+/**	@brief РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ */
 	CBtcMainWindow(QWidget *parent = 0);
 
+/**	@brief Р”РµСЃС‚СЂСѓРєС‚РѕСЂ */
 	~CBtcMainWindow();
 
 public slots:
@@ -26,7 +28,7 @@ public slots:
 	void OnCount();
 
 
-	// для исследования индикаторов:
+	// РґР»СЏ РёСЃСЃР»РµРґРѕРІР°РЅРёСЏ РёРЅРґРёРєР°С‚РѕСЂРѕРІ:
 	void OnMa1WinChanged(int win);
 	void OnMa1StepChanged(int step);
 	void OnMr1WinChanged(int win);

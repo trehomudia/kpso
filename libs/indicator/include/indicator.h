@@ -24,19 +24,26 @@ struct INDICATOR_API MovingAveragePoint
 	double movingDispersion;
 };
 
+/**	@brief Класс технического индикатора изменения курса валюты */
 class INDICATOR_API CIndicator
 {
 
 public:
 
+/**	@name Конструктор и деструктор
+	@{ */
 	CIndicator(std::vector< std::pair< double, double > > timeSamples);
 
 	~CIndicator();
+/**	@} */
 
+/**	@brief Оператор присваивания */
 	CIndicator & operator = (const CIndicator & other);
 
+/**	@brief Получение значений скользящей регрессии в каждой точке исходной зависимости */
 	std::vector< std::pair< double, double > > GetMovingRegression(int winWidth, int polyDegree);
 
+/**	@brief Получение значений скользящего среднего в каждой точке исходной зависимости */
 	std::vector< std::pair< double, double > > GetMovingAverage(int winWidth, int step);
 
 	std::vector< MovingAveragePoint > GetRealTimeMovingRegression(int winWidth, int step);
@@ -53,12 +60,12 @@ private:
 	double GetSingleMovingAverage(int winWidth, int index);
 
 /**
-@return ����������_�������, ����������_���������
+@return выборочное_среднее, выборочная_дисперсия
 */
 	std::pair< double, double > GetSingleRealTimeMovingAverage(int winWidth, int index);
 	std::pair< double, double > GetSingleRealTimeMovingRegression(int winWidth, int polyDegree, int index);
 
-	std::vector< std::pair< double, double > > m_timeSamples;
+	std::vector< std::pair< double, double > > m_timeSamples; //!< исходная зависимость величины (цены) от времени
 
 	
 
