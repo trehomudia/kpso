@@ -46,6 +46,12 @@ m_priceCurve(0)
 	QMap< int, QwtPlotCurve* >			m_indicatorMap;
 	QList< QwtPlotCurve *>				m_increaseIntervalLines;
 
+
+	std::vector< std::pair< double, double > > firstMovingRegressionSamples;
+	std::vector< std::pair< double, double > > secondMovingRegressionSamples;
+	std::vector< std::vector< std::pair< double, double > > > mrsVec;	//!< набор последовательных скользящиих регрессий
+
+
 	QwtPlotTextLabel*					label;					//!< надпись на графике
 	QwtText								title;					//!< текст надписи
 };
@@ -149,7 +155,7 @@ void CTimePlot::SetRealTimeMovingAverageIndicator(int win, int step)
 	}
 
 
-	QwtPlotCurve *avrCurve		= GetIndicatorLine(avrSamples, 0, QColor(Qt::red));
+	QwtPlotCurve *avrCurve		= GetIndicatorLine(avrSamples, 0, QColor(0,128,192));
 	QwtPlotCurve *dispCurve		= GetIndicatorLine(dispersionSamples, 1, QColor(Qt::darkGreen));
 	QwtPlotCurve *angleCurve	= GetIndicatorLine(angleSamples, 2, QColor(Qt::darkBlue));
 
@@ -179,14 +185,16 @@ void CTimePlot::SetRealTimeMovingRegressionIndicator(int win, int step)
 	std::vector< MovingAveragePoint > samples = ind.GetRealTimeMovingRegression(win, step);
 
 	// вектор средних:
-	std::vector< std::pair< double, double > > avrSamples;
+	//std::vector< std::pair< double, double > > avrSamples;
+	m_pData->firstMovingRegressionSamples.clear();
 	for(int i = 0; i < samples.size(); i++)
-		avrSamples.push_back( std::pair< double, double >( samples[i].x, samples[i].movingAverage ) );
+		m_pData->firstMovingRegressionSamples.push_back( std::pair< double, double >( samples[i].x, samples[i].movingAverage ) );
+		//avrSamples.push_back( std::pair< double, double >( samples[i].x, samples[i].movingAverage ) );
 
-	// вектор дисперсий:
-	std::vector< std::pair< double, double > > dispersionSamples;
-	for(int i = 0; i < samples.size(); i++)
-		dispersionSamples.push_back( std::pair< double, double >( samples[i].x, samples[i].movingDispersion ) );
+	//// вектор дисперсий:
+	//std::vector< std::pair< double, double > > dispersionSamples;
+	//for(int i = 0; i < samples.size(); i++)
+	//	dispersionSamples.push_back( std::pair< double, double >( samples[i].x, samples[i].movingDispersion ) );
 
 	// вектор углов наклона изменения средних:
 	std::vector< std::pair< double, double > > angleSamples;
@@ -199,9 +207,20 @@ void CTimePlot::SetRealTimeMovingRegressionIndicator(int win, int step)
 	}
 
 
-	QwtPlotCurve *avrCurve		= GetIndicatorLine(avrSamples, 0, QColor(Qt::red));
-	QwtPlotCurve *dispCurve		= GetIndicatorLine(dispersionSamples, 1, QColor(Qt::darkGreen));
+
+
+	QwtPlotCurve *avrCurve		= GetIndicatorLine(m_pData->firstMovingRegressionSamples, 0, QColor(0,128,192));
+	//QwtPlotCurve *dispCurve		= GetIndicatorLine(dispersionSamples, 1, QColor(Qt::darkGreen));
 	QwtPlotCurve *angleCurve	= GetIndicatorLine(angleSamples, 2, QColor(Qt::darkBlue));
+
+	// пунктирная линия уровня 0 второй оси X:
+	QVector< QPointF > nullPoints;
+	nullPoints << QPointF(angleSamples[0].first, 0.0) << QPointF(angleSamples[angleSamples.size()-1].first, 0.0);
+	QwtPlotCurve *nullAngleCurve = new QwtPlotCurve();
+	nullAngleCurve->setSamples(nullPoints);
+	nullAngleCurve->setPen(* new QPen(Qt::darkBlue, 1, Qt::DashLine)); 
+	//nullAngleCurve->setRenderHint(QwtPlotItem::RenderAntialiased);
+
 
 	
 	avrCurve->attach(this);
@@ -210,6 +229,48 @@ void CTimePlot::SetRealTimeMovingRegressionIndicator(int win, int step)
 
 //	dispCurve->setYAxis(QwtPlot::yRight);
 //	dispCurve->attach(this);
+
+	angleCurve->setYAxis(QwtPlot::yRight);
+	angleCurve->attach(this);
+	nullAngleCurve->setYAxis(QwtPlot::yRight);
+	nullAngleCurve->attach(this);
+
+	replot();
+}
+
+
+
+void CTimePlot::SetRealTimeRepeatMovingRegressionIndicator(int win, int step)
+{
+	if(m_pData->firstMovingRegressionSamples.empty())
+		return;
+
+	CIndicator ind(m_pData->firstMovingRegressionSamples);
+
+	std::vector< MovingAveragePoint > samples = ind.GetRealTimeMovingRegression(win, step);
+
+	// вектор средних:
+	m_pData->secondMovingRegressionSamples.clear();
+	for(int i = 0; i < samples.size(); i++)
+		m_pData->secondMovingRegressionSamples.push_back( std::pair< double, double >( samples[i].x, samples[i].movingAverage ) );
+
+	// вектор углов наклона изменения средних:
+	std::vector< std::pair< double, double > > angleSamples;
+	double k = 0.0;
+	for(int i = 1; i < samples.size(); i++)
+	{
+		k = (samples[i].movingAverage - samples[i-1].movingAverage) / (samples[i].x - samples[i-1].x) ;
+
+		angleSamples.push_back( std::pair< double, double >( samples[i].x, atan(k) ) );
+	}
+
+	QwtPlotCurve *avrCurve		= GetIndicatorLine(m_pData->secondMovingRegressionSamples, 3, QColor(Qt::red));
+	//QwtPlotCurve *dispCurve		= GetIndicatorLine(dispersionSamples, 1, QColor(Qt::darkGreen));
+	QwtPlotCurve *angleCurve	= GetIndicatorLine(angleSamples, 2, QColor(Qt::darkBlue));
+
+	avrCurve->attach(this);
+
+	enableAxis( QwtPlot::yRight );
 
 	angleCurve->setYAxis(QwtPlot::yRight);
 	angleCurve->attach(this);

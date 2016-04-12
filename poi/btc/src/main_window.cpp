@@ -20,15 +20,19 @@ void CBtcMainWindow::AddConnects()
 	// элементы управления параметрами расчета априорной информации:
 	connect(m_spbxWinSize1,		SIGNAL(EditingFinished(int)),	this, SLOT(OnWin1Changed(int)));
 	connect(m_spbxStep1,		SIGNAL(EditingFinished(int)),	this, SLOT(OnStep1Changed(int)));
-	connect(m_btnFixedWin,		SIGNAL(clicked()),				this, SLOT(OnCountFixedWin()));
-	connect(m_btnFixedStep,		SIGNAL(clicked()),				this, SLOT(OnCountFixedStep()));
-	connect(m_btnCalcQuality,	SIGNAL(clicked()),				this, SLOT(OnCount()));
+
+	// элементы управления построением графика зависимости функции "качества"("выигрыша"):
+	connect(m_btnFixedWin,		SIGNAL(clicked()),				this, SLOT(OnCountFixedWin()));		// от шага при фиксированной ширине окна
+	connect(m_btnSmooth,		SIGNAL(clicked()),				this, SLOT(OnSmoothFixedWin()));	//сглаживание зав-ти от шага при фиксированной ширине окна
+	connect(m_btnFixedStep,		SIGNAL(clicked()),				this, SLOT(OnCountFixedStep()));	// от ширины окна при фиксированном шаге
+	connect(m_btnCalcQuality,	SIGNAL(clicked()),				this, SLOT(OnCount()));				// функция двух переменных на заданной сетке 
 
 	// элементы управления индикаторами (realtime)
 	connect(m_spbxMa1Win,		SIGNAL(EditingFinished(int)),	this, SLOT(OnMa1WinChanged(int)));
 	connect(m_spbxMa1Step,		SIGNAL(EditingFinished(int)),	this, SLOT(OnMa1StepChanged(int)));
 	connect(m_spbxMr1Win,		SIGNAL(EditingFinished(int)),	this, SLOT(OnMr1WinChanged(int)));
 	connect(m_spbxMr1Step,		SIGNAL(EditingFinished(int)),	this, SLOT(OnMr1StepChanged(int)));
+	connect(m_spbxMr2Win,		SIGNAL(EditingFinished(int)),	this, SLOT(OnMr2WinChanged(int)));
 	
 }
 
@@ -72,21 +76,41 @@ void CBtcMainWindow::OnCountFixedWin()
 	int stepEnd		= m_spbxStepEnd->value();
 	int stepStep	= m_spbxStepIncrement->value();
 
-	QVector< QPair< double, double > > stepQualityDep = GetStepQualityDependence(m_samples, winWidth, stepStart, stepEnd, stepStep);
+	m_stepQualityDep = GetStepQualityDependence(m_samples, winWidth, stepStart, stepEnd, stepStep);
 
-	m_fixedWinPlot->SetData(stepQualityDep);
+	m_fixedWinPlot->SetData(m_stepQualityDep);
 
 	//test:
-	std::vector< FuncPoint > stepQualityDepStd = ConvertQVectorQPairToStd(stepQualityDep);
-	CIndicator ind(stepQualityDepStd);
-	std::vector< FuncPoint > ma1 = ind.GetMovingAverage(10, 1);
+	OnSmoothFixedWin();
+	//std::vector< FuncPoint > stepQualityDepStd = ConvertQVectorQPairToStd(m_stepQualityDep);
+	//CIndicator ind(stepQualityDepStd);
+	//std::vector< FuncPoint > ma1 = ind.GetMovingAverage(10, 1);
 
-	CIndicator ind2(ma1);
-	std::vector< FuncPoint > ma2 = ind2.GetMovingAverage(10, 1);
+	//CIndicator ind2(ma1);
+	//std::vector< FuncPoint > ma2 = ind2.GetMovingAverage(10, 1);
 
-	m_fixedWinPlot->SetAddData(ConvertStdVectorStdPairToQt(ma2));
+	//m_fixedWinPlot->SetAddData(ConvertStdVectorStdPairToQt(ma2));
 
 }
+
+void CBtcMainWindow::OnSmoothFixedWin()
+{
+	if(m_stepQualityDep.empty())
+		return;
+
+	int w1 = m_spbxSm1->value();
+	int w2 = m_spbxSm2->value();
+
+	std::vector< FuncPoint > stepQualityDepStd = ConvertQVectorQPairToStd(m_stepQualityDep);
+	CIndicator ind(stepQualityDepStd);
+	std::vector< FuncPoint > ma1 = ind.GetMovingAverage(w1, 1);
+
+	CIndicator ind2(ma1);
+	std::vector< FuncPoint > ma2 = ind2.GetMovingAverage(w2, 1);
+
+	m_fixedWinPlot->SetAddData(ConvertStdVectorStdPairToQt(ma2));
+}
+
 
 void CBtcMainWindow::OnCountFixedStep()
 {
@@ -149,4 +173,10 @@ void CBtcMainWindow::OnMr1StepChanged(int step)
 {
 	int win = m_spbxMr1Win->value();
 	m_indicatorPlot->SetRealTimeMovingRegressionIndicator(win, step);
+}
+
+void CBtcMainWindow::OnMr2WinChanged(int win)
+{
+	//int step = m_spbxMr1Step->value();
+	m_indicatorPlot->SetRealTimeRepeatMovingRegressionIndicator(win, 1);
 }
