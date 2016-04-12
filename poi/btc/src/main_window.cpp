@@ -33,6 +33,10 @@ void CBtcMainWindow::AddConnects()
 	connect(m_spbxMr1Win,		SIGNAL(EditingFinished(int)),	this, SLOT(OnMr1WinChanged(int)));
 	connect(m_spbxMr1Step,		SIGNAL(EditingFinished(int)),	this, SLOT(OnMr1StepChanged(int)));
 	connect(m_spbxMr2Win,		SIGNAL(EditingFinished(int)),	this, SLOT(OnMr2WinChanged(int)));
+	connect(m_spbxMr3Win,		SIGNAL(EditingFinished(int)),	this, SLOT(OnMr3WinChanged(int)));
+	connect(m_spbxMr4Win,		SIGNAL(EditingFinished(int)),	this, SLOT(OnMr4WinChanged(int)));
+	
+
 	
 }
 
@@ -179,4 +183,14 @@ void CBtcMainWindow::OnMr2WinChanged(int win)
 {
 	//int step = m_spbxMr1Step->value();
 	m_indicatorPlot->SetRealTimeRepeatMovingRegressionIndicator(win, 1);
+}
+
+void CBtcMainWindow::OnMr3WinChanged(int win)
+{
+	m_indicatorPlot->SetRealTimeRepeat3MovingRegressionIndicator(win, 1);
+}
+
+void CBtcMainWindow::OnMr4WinChanged(int win)
+{
+	m_indicatorPlot->SetRealTimeRepeat4MovingRegressionIndicator(win, 1);
 }

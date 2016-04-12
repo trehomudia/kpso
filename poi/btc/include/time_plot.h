@@ -24,6 +24,8 @@ public:
 	void SetRealTimeMovingAverageIndicator(int win, int step);
 	void SetRealTimeMovingRegressionIndicator(int win, int step);
 	void SetRealTimeRepeatMovingRegressionIndicator(int win, int step);
+	void SetRealTimeRepeat3MovingRegressionIndicator(int win, int step);
+	void SetRealTimeRepeat4MovingRegressionIndicator(int win, int step);
 
 private:
 

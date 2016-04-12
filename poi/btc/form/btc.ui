@@ -633,8 +633,11 @@
           </item>
           <item row="1" column="12">
            <widget class="CSpinBox" name="m_spbxMr3Win">
-            <property name="readOnly">
+            <property name="enabled">
              <bool>true</bool>
+            </property>
+            <property name="readOnly">
+             <bool>false</bool>
             </property>
             <property name="minimum">
              <number>1</number>

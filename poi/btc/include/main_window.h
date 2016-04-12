@@ -37,6 +37,8 @@ public slots:
 	void OnMr1WinChanged(int win);
 	void OnMr1StepChanged(int step);
 	void OnMr2WinChanged(int win);
+	void OnMr3WinChanged(int win);
+	void OnMr4WinChanged(int win);
 
 private:
 
