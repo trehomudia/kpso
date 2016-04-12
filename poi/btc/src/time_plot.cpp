@@ -342,7 +342,7 @@ void CTimePlot::SetRealTimeRepeat4MovingRegressionIndicator(int win, int step)
 		angleSamples.push_back( std::pair< double, double >( samples[i].x, atan(k) ) );
 	}
 
-	QwtPlotCurve *avrCurve		= GetIndicatorLine(m_pData->fourthMovingRegressionSamples, 4, QColor(255,128,64));
+    QwtPlotCurve *avrCurve		= GetIndicatorLine(m_pData->fourthMovingRegressionSamples, 5, QColor(255,128,64));
 	//QwtPlotCurve *dispCurve		= GetIndicatorLine(dispersionSamples, 1, QColor(Qt::darkGreen));
 	QwtPlotCurve *angleCurve	= GetIndicatorLine(angleSamples, 2, QColor(Qt::darkBlue));
 
