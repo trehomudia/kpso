@@ -180,11 +180,11 @@ QStringList CStorage::GetChampNames()
 {
   QStringList list;
   list << "russia";
-  list << "england";
-  list << "spain";
-  list << "italy";
-  list << "germany";
-  list << "france";
+//  list << "england";
+//  list << "spain";
+//  list << "italy";
+//  list << "germany";
+//  list << "france";
   return list;
 }
 

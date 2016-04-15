@@ -65,12 +65,12 @@ public:
   int Sum25Cash(CTeam concurent, QVector<int> cashList);
   int Sum35Cash(CTeam concurent, QVector<int> cashList);
 
-  QVector<int> NoParityesCashList(){return m_noParityCash;}
-  QVector<int> NoWinCashList(){return m_noWinCash;}
-  QVector<int> ParityesCashList(){return m_parityCash;}
-  QVector<int> NoSum15CashList(){return m_noSum15Cash;}
-  QVector<int> NoSum25CashList(){return m_noSum25Cash;}
-  QVector<int> NoSum35CashList(){return m_noSum35Cash;}
+  QVector<int>& NoParityesCashList(){return m_noParityCash;}
+  QVector<int>& NoWinCashList(){return m_noWinCash;}
+  QVector<int>& ParityesCashList(){return m_parityCash;}
+  QVector<int>& NoSum15CashList(){return m_noSum15Cash;}
+  QVector<int>& NoSum25CashList(){return m_noSum25Cash;}
+  QVector<int>& NoSum35CashList(){return m_noSum35Cash;}
 
 private:
   void FormNoParity();
