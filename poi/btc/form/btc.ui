@@ -531,7 +531,7 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="15">
+          <item row="1" column="19">
            <spacer name="horizontalSpacer_2">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -670,6 +670,39 @@
             </property>
            </widget>
           </item>
+          <item row="0" column="15" colspan="4">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>Доверительная область для скорости</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="16">
+           <widget class="CSpinBox" name="spinBox"/>
+          </item>
+          <item row="1" column="15">
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>Окно: </string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="17">
+           <widget class="QLabel" name="label_29">
+            <property name="text">
+             <string>Уровень доверия: </string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="18">
+           <widget class="CDoubleSpinBox" name="doubleSpinBox"/>
+          </item>
          </layout>
         </item>
         <item row="1" column="0">
@@ -738,6 +771,11 @@
    <extends>QWidget</extends>
    <header>quality_3dplot.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>utils.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
